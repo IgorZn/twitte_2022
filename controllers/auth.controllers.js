@@ -30,13 +30,13 @@ exports.registerUser = async (req, res, next) => {
     })
 
     // All fields are present
-    if (trimmed.length === 5) {
+    if (trimmed.length === 5 && trimmed.every(el => el.length >= 1)) {
 
     } else {
-
+        req.body.errorMessage = "Please make sure field has a valid value"
         res
             .status(200)
-            .render("register", )
+            .render("register", req.body)
     }
 
     console.log(req.body)

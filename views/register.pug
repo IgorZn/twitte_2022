@@ -6,19 +6,21 @@ block content
                     .panel-heading
                         h3.panel-title
                             | Please sign up
+                        if errorMessage
+                            p.alert.alert-primary #{errorMessage}
                     .panel-body
                         form#registerForm(method="post" onsubmit="event.preventDefault(); validateForm()")
                             .row
                                 .col-xs-6.col-sm-6.col-md-6
                                     .form-group
-                                        input#first_name.form-control.input-sm(type='text' name='first_name' placeholder='First Name' required="")
+                                        input#first_name.form-control.input-sm(type='text' value=first_name name='first_name' placeholder='First Name' required="")
                                 .col-xs-6.col-sm-6.col-md-6
                                     .form-group
-                                        input#last_name.form-control.input-sm(type='text' name='last_name' placeholder='Last Name' required="")
+                                        input#last_name.form-control.input-sm(type='text' value=last_name name='last_name' placeholder='Last Name' required="")
                             .form-group
-                                input#email.form-control.input-sm(type='email' name='email' placeholder='Email Address' required="")
+                                input#email.form-control.input-sm(type='email' value=email name='email' placeholder='Email Address' required="")
                             .form-group
-                                input#user_name.form-control.input-sm(type='text' name='user_name' placeholder='User name' required="")
+                                input#user_name.form-control.input-sm(type='text' value=user_name name='user_name' placeholder='User name' required="")
                             .row
                                 .col-xs-6.col-sm-6.col-md-6
                                     .form-group
