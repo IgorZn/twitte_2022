@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const connDB = require("./conf/db");
 const dotenv = require("dotenv");
+const session = require('express-session')
 
 // Load env consts
 dotenv.config({ path: './conf/config.env' });
@@ -22,6 +23,16 @@ const app = express();
 /* View engine setup */
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    httpOnly: true,
+  }
+}))
 
 app.use(logger('dev'));
 app.use(express.json());

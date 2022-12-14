@@ -42,7 +42,7 @@ exports.registerUser = async (req, res, next) => {
             ]
         })
             .exec()
-            .then(user => {
+            .then(async user => {
                 if (user) {
                     // User already exist
                     if (user.email === email || user.username === username) {
@@ -56,10 +56,8 @@ exports.registerUser = async (req, res, next) => {
                 // If no such user
                 if (!user) {
                     // add password to DB
-                    User.create(req.body)
-                        .then(user => {
-                            console.log(user)
-                        })
+                    req.session.user = await User.create(req.body)
+                    return res.redirect('/')
                 }
 
             })
