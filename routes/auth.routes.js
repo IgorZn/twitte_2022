@@ -7,6 +7,7 @@ const {loginUser, registerUser, getRegisterPage} = require("../controllers/auth.
 
 routerLogin.route('/')
     .get(loginUser)
+    .post(loginUser)
 
 routerRegister.route('/')
     .get(getRegisterPage)

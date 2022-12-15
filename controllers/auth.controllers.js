@@ -6,9 +6,39 @@ const ErrResponse = require("../utils/errorResponse");
 // @route       POST /login
 // @access      Public
 exports.loginUser = async (req, res, next) => {
+    const {logUserName, logPassword} = req.body
+    if (!res.session && !logUserName && !logPassword) {
+        return res
+            .status(200)
+            .render("login", {title: 'Login page'})
+    } else {
+        await User.findOne({
+            $or: [
+                {username: logUserName},
+                {email: logUserName}
+            ]
+        })
+            .exec()
+            .then(async user => {
+                const isMatch = await User.matchPassword(logPassword, user.password);
+
+                if (isMatch) {
+                    req.session.user = user
+                    return res
+                        .status(200)
+                        .redirect('/')
+                }
+            })
+            .catch(err => {
+                res
+                    .status(200)
+                    .render("login", {errorMessage: err})
+            })
+    }
+
     res
         .status(200)
-        .render("login", {title: 'Login page'})
+        .render("login", {errorMessage: "Make sure the credential is correct"})
 };
 
 

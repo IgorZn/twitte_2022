@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "/images/profilePic.png"
     },
-},{
+}, {
     timestamps: true
 });
 
@@ -44,6 +44,15 @@ UserSchema.pre('save', async function (next) {
     // Run below ONLY if we're modifying PASSWORD field
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+})
+
+UserSchema.static({
+    matchPassword: async function (plainTextPassword, hashedPassword) {
+        return await bcrypt.compare(plainTextPassword, hashedPassword)
+            .then(function (result) {
+                return result
+            })
+    },
 })
 
 module.exports = mongoose.model('User', UserSchema);

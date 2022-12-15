@@ -4,6 +4,9 @@ block content
     .loginContainer
         h1= title
         p Welcome to #{title}
+        if errorMessage
+            p.alert.alert-primary #{errorMessage}
+
         form(method="post")
             input(type="text", name="logUserName", placeholder="User name or email", required="")
             input(type="password", name="logPassword", placeholder="Password", required="")

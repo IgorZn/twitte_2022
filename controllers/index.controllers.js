@@ -2,5 +2,9 @@
 // @route       GET /
 // @access      Public
 exports.index = (req, res, next) => {
-    res.render('index', {title: 'Express'});
+    const payload = {
+        title: 'Express PISIKO',
+        user: req.session.user
+    }
+    res.render('index', payload);
 };
