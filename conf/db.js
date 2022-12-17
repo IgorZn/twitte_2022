@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const redis = require('redis');
 const colors = require('colors');
 
 const connDB = async () => {

@@ -21,12 +21,9 @@ exports.loginUser = async (req, res, next) => {
             .exec()
             .then(async user => {
                 const isMatch = await User.matchPassword(logPassword, user.password);
-
                 if (isMatch) {
                     req.session.user = user
-                    return res
-                        .status(200)
-                        .redirect('/')
+                    req.session.key = req.sessionID
                 }
             })
             .catch(err => {
@@ -34,11 +31,32 @@ exports.loginUser = async (req, res, next) => {
                     .status(200)
                     .render("login", {errorMessage: err})
             })
+
+        return res
+            .status(200)
+            .redirect('/')
     }
 
-    res
+    return res
         .status(200)
         .render("login", {errorMessage: "Make sure the credential is correct"})
+};
+
+
+// @desc        Logout user
+// @route       GET /logout
+// @access      Public
+exports.logOut = async (req, res, next) => {
+    console.log('logOut>>>', req.session)
+    if (req.session) {
+        req.session.destroy()
+        return res
+            .status(200)
+            .redirect('/login')
+    }
+    return res
+        .status(200)
+        .redirect('/login')
 };
 
 
