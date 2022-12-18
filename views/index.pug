@@ -3,3 +3,4 @@ extends layouts/main-layout
 block content
   p Welcome to #{title}
   p #{user.username}
+  +createPostForm(user)
