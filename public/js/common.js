@@ -1,7 +1,7 @@
 $("#postTextarea").keyup(event => {
-    var textbox = $(event.target);
-    var value = textbox.val().trim();
-    var submitButton = $("#submitPostButton");
+    let textbox = $(event.target);
+    let value = textbox.val().trim();
+    let submitButton = $("#submitPostButton");
 
     if (submitButton.length == 0) return alert("No submit button found");
 
@@ -15,14 +15,14 @@ $("#postTextarea").keyup(event => {
 
 
 $("#submitPostButton").click(() => {
-    var button = $(event.target);
-    var textbox = $("#postTextarea");
+    let button = $(event.target);
+    let textbox = $("#postTextarea");
 
-    var data = {
+    let data = {
         content: textbox.val()
     }
 
-    $.post("/api/post", data, (postData, status, xhr) => {
+    $.post("/api/v1/posts", data, (postData, status, xhr) => {
 
     })
 })
