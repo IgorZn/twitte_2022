@@ -12,19 +12,14 @@ exports.addPost = async (req, res, next) => {
             .json({success: true, data: "No data in content"});
     }
 
-    console.log(req.session.user.toString())
-
     const context = {
         content: req.body.content,
-        postedBy: req.session.user._id.toString()
+        postedBy: req.session.user
     }
 
     await Post.create(context)
         .then(async data => {
-            const populatedData = await User.populate(data, {
-                path: 'postedBy',
-                select: 'firstName lastName username'
-            })
+            const populatedData = await User.populate(data, { path: 'postedBy' })
             res
                 .status(201)
                 .json({success: true, data: populatedData})

@@ -18,6 +18,7 @@ exports.loginUser = async (req, res, next) => {
                 {email: logUserName}
             ]
         })
+            .select('+password')
             .exec()
             .then(async user => {
                 const isMatch = await User.matchPassword(logPassword, user.password);
