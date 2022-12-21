@@ -19,10 +19,32 @@ exports.addPost = async (req, res, next) => {
 
     await Post.create(context)
         .then(async data => {
-            const populatedData = await User.populate(data, { path: 'postedBy' })
+            const populatedData = await User.populate(data, {path: 'postedBy'})
             res
                 .status(201)
                 .json({success: true, data: populatedData})
         })
+
+};
+
+
+// @desc        Get posts
+// @route       GET /api/v1/posts
+// @access      Private
+exports.getPosts = async (req, res, next) => {
+
+    await Post.find(({postedBy: req.session.user._id}))
+        .populate({
+            path: 'postedBy',
+            select: 'firstName lastName username profilePic'
+        })
+        .sort('field -createdAt') // по возрастания, а без "-" по убыванию
+        .exec()
+        .then(data => {
+            res
+                .status(200)
+                .json({success: true, data})
+        })
+        .catch(err => next(err))
 
 };
