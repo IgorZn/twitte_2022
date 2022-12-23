@@ -30,12 +30,45 @@ $("#submitPostButton").click(() => {
     })
 })
 
+
+$(document).on("click", ".likeButton", (event) => {
+    let button = $(event.target);
+    let postId = getPostIdFromElement(button);
+    console.log(postId);
+})
+
+
+function getPostIdFromElement(element) {
+    const isRoot = element.hasClass("post");
+    const rootElement = isRoot == true ? element : element.closest(".post");
+    const postId = rootElement.data().id;
+    /*
+    *  rootElement.data().id
+    *  т.к. у нас <div class='post' data-id='${dataId}'
+    *  .data() -- пойдет и соберет всё, что с data-<что угодно>=<какое-то значение>
+    *  и вернут объект, например так:
+    *  {bar: 'some-bar-value', id: '63a2b44e595c4b1620ba4767'}
+    * */
+
+    if (postId === undefined) return alert("Post id undefined");
+
+
+    $.ajax({
+        url: `/api/v1/posts/${postId}/like`,
+        type: "PUT",
+        success: (postData) => {
+            console.log(postData);
+        }
+    })
+}
+
+
 function createPostHTML(postData) {
-    console.log('createPostHTML-postData',postData)
     const createdAt = timeDifference(new Date(), new Date(postData.createdAt))
     const postedBy = postData.postedBy
-    const displayName = postedBy.firstName + ' ' +postedBy.lastName
-    return `<div class='post'>
+    const dataId = postData._id
+    const displayName = postedBy.firstName + ' ' + postedBy.lastName
+    return `<div class='post' data-id='${dataId}' data-bar="some-bar-value">
                 <div class='mainContentContainer'>
                     <div class='userImageContainer'>
                         <img src='${postedBy.profilePic}'>
@@ -61,7 +94,7 @@ function createPostHTML(postData) {
                                 </button>
                             </div>
                             <div class='postButtonContainer'>
-                                <button>
+                                <button  class='likeButton'>
                                     <i class='far fa-heart'></i>
                                 </button>
                             </div>
@@ -83,28 +116,18 @@ function timeDifference(current, previous) {
     var elapsed = current - previous;
 
     if (elapsed < msPerMinute) {
-        if(elapsed/1000 < 30) return "Just now";
+        if (elapsed / 1000 < 30) return "Just now";
 
-        return Math.round(elapsed/1000) + ' seconds ago';
-    }
-
-    else if (elapsed < msPerHour) {
-         return Math.round(elapsed/msPerMinute) + ' minutes ago';
-    }
-
-    else if (elapsed < msPerDay ) {
-         return Math.round(elapsed/msPerHour ) + ' hours ago';
-    }
-
-    else if (elapsed < msPerMonth) {
-        return Math.round(elapsed/msPerDay) + ' days ago';
-    }
-
-    else if (elapsed < msPerYear) {
-        return Math.round(elapsed/msPerMonth) + ' months ago';
-    }
-
-    else {
-        return Math.round(elapsed/msPerYear ) + ' years ago';
+        return Math.round(elapsed / 1000) + ' seconds ago';
+    } else if (elapsed < msPerHour) {
+        return Math.round(elapsed / msPerMinute) + ' minutes ago';
+    } else if (elapsed < msPerDay) {
+        return Math.round(elapsed / msPerHour) + ' hours ago';
+    } else if (elapsed < msPerMonth) {
+        return Math.round(elapsed / msPerDay) + ' days ago';
+    } else if (elapsed < msPerYear) {
+        return Math.round(elapsed / msPerMonth) + ' months ago';
+    } else {
+        return Math.round(elapsed / msPerYear) + ' years ago';
     }
 }

@@ -10,7 +10,8 @@ const PostSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    pinned: Boolean
+    pinned: Boolean,
+    likes: [{ type: 'ObjectId', ref: 'User', required: true }] // пользователи, которым нра этот пост
 }, {timestamps: true});
 
 

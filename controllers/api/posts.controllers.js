@@ -28,6 +28,19 @@ exports.addPost = async (req, res, next) => {
 };
 
 
+// @desc        Like post
+// @route       POST /api/v1/posts
+// @access      Private
+exports.likePost = async (req, res, next) => {
+    const postID = req.params.id
+    const userID = req.session.user._id
+    res
+        .status(200)
+        .json({success: true})
+
+};
+
+
 // @desc        Get posts
 // @route       GET /api/v1/posts
 // @access      Private
