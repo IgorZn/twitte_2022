@@ -4,6 +4,6 @@ mixin createPostForm(user)
             if user.profilePic
                 img(src=user.profilePic, alt="User's profile picture")
         .textareaContainer
-            textarea#postTextarea(placeholder="What's happening?")
+            textarea#postTextarea(placeholder="What's happening?" maxlength='150')
             .buttonsContainer
                 button#submitPostButton(disabled="") Post
