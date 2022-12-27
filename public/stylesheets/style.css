@@ -6,6 +6,7 @@
     --spacing: 15px;
     --greyText: rgb(101, 119, 134);
     --greyButtonText: rgba(0,0,0,0.34);
+    --red: rgb(255, 0, 0);
 }
 
 /* apply to all stuff */
@@ -60,6 +61,13 @@ button {
     background-color: transparent;
     border: none;
     color: var(--greyButtonText);
+}
+
+/* Не регистрируй никаких событий в сл сочетании button: i svg span*/
+button i,
+button svg,
+button span {
+    pointer-events: none;
 }
 
 .mainSectionContainer {
@@ -182,4 +190,8 @@ button {
     background-color: #d4edff;
     color: var(--blue);
     border-radius: 50%;
+}
+
+.postButtonContainer.red button.active {
+    color: var(--red);
 }

@@ -77,16 +77,16 @@ exports.likePost = async (req, res, next) => {
                 .exec()
                 .then(data => {
                     console.log('post>>>', data.likes.length)
-                    // res
-                    //     .status(201)
-                    //     .json({status: true, data, likes: data.likes.length})
+                    res
+                        .status(201)
+                        .json({status: true, data, likes: data.likes.length})
                 })
                 .catch(err => next(err))
 
 
-            res
-                .status(201)
-                .json({status: true, data, likes: data.likes.length})
+            // res
+            //     .status(201)
+            //     .json({status: true, data, likes: data.likes.length})
         })
         .catch(err => next(err))
 
@@ -98,6 +98,11 @@ exports.likePost = async (req, res, next) => {
 // @route       GET /api/v1/posts
 // @access      Private
 exports.getPosts = async (req, res, next) => {
+    if(!req.session.user){
+        res
+            .status(404)
+            .redirect('/login')
+    }
 
     await Post.find(({postedBy: req.session.user._id}))
         .populate({

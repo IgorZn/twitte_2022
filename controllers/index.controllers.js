@@ -12,6 +12,7 @@ exports.index = (req, res, next) => {
     const payload = {
         title: 'Express PISIKO',
         user: req.session.user,
+        userLoggedJs: JSON.stringify(req.session.user),
     }
     res.render('index', payload);
 };
