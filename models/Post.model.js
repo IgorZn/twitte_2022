@@ -12,7 +12,9 @@ const PostSchema = new mongoose.Schema({
         required: true
     },
     pinned: Boolean,
-    likes: [{ type: 'ObjectId', ref: 'User', required: true }] // ПОЛЬЗОВАТЕЛИ, которым нра этот ПОСТ
+    likes: [{ type: 'ObjectId', ref: 'User', required: true }], // ПОЛЬЗОВАТЕЛИ, которым нра этот ПОСТ
+    retweetUsers: [{ type: 'ObjectId', ref: 'User' }], // ПОЛЬЗОВАТЕЛИ, ретвитнули этот пост
+    retweetData: [{ type: 'ObjectId', ref: 'Post'}], // ПОЛЬЗОВАТЕЛИ, ретвитнули этот пост
 }, {timestamps: true});
 
 // PostSchema.pre('save', async function (next) {

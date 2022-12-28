@@ -41,13 +41,34 @@ $(document).on("click", ".likeButton", (event) => {
         url: `/api/v1/posts/${postId}/like`,
         type: "PUT",
         success: (postData) => {
-            console.log(postData)
             button.find("span").text(postData.likes || "");
             if(postData.data.likes.includes(userLoggedJs._id)){
                 button.addClass("active")
             } else {
                 button.removeClass("active")
             }
+        }
+    })
+
+})
+
+$(document).on("click", ".retweetButton", (event) => {
+    let button = $(event.target);
+    let postId = getPostIdFromElement(button);
+
+    if(postId === undefined) return;
+
+    $.ajax({
+        url: `/api/v1/posts/${postId}/retweet`,
+        type: "POST",
+        success: (postData) => {
+            console.log(postData)
+            // button.find("span").text(postData.likes || "");
+            // if(postData.data.likes.includes(userLoggedJs._id)){
+            //     button.addClass("active")
+            // } else {
+            //     button.removeClass("active")
+            // }
         }
     })
 
@@ -99,7 +120,7 @@ function createPostHTML(postData) {
                                 </button>
                             </div>
                             <div class='postButtonContainer green'>
-                                <button class="retweet">
+                                <button class="retweetButton">
                                     <i class='fas fa-retweet'></i>
                                 </button>
                             </div>

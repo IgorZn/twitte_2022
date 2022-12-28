@@ -32,7 +32,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "/images/profilePic.jpeg"
     },
-    likes: [{ type: 'ObjectId', ref: 'Post', required: true }] // ПОСТЫ, понравившиеся  ПОЛЬЗОВАТЕЛЮ
+    likes: [{ type: 'ObjectId', ref: 'Post' }], // ПОСТЫ, понравившиеся  ПОЛЬЗОВАТЕЛЮ
+    retweets: [{ type: 'ObjectId', ref: 'Post' }], // ПОСТЫ, которые ретвитнули
 }, {
     timestamps: true
 });

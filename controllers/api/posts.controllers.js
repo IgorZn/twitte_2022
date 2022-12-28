@@ -1,5 +1,6 @@
 const Post = require('../../models/Post.model')
 const User = require('../../models/User.model')
+const colors = require('colors');
 
 // @desc        Add post
 // @route       POST /api/v1/posts
@@ -34,7 +35,7 @@ exports.addPost = async (req, res, next) => {
 
 
 // @desc        Like post
-// @route       POST /api/v1/posts
+// @route       POST /api/v1/:id/like
 // @access      Private
 exports.likePost = async (req, res, next) => {
     const postID = req.params.id
@@ -89,6 +90,52 @@ exports.likePost = async (req, res, next) => {
             //     .json({status: true, data, likes: data.likes.length})
         })
         .catch(err => next(err))
+
+
+};
+
+
+// @desc        Retweet post
+// @route       POST /api/v1/:id/retweet
+// @access      Private
+exports.retweetPost = async (req, res, next) => {
+
+    const postID = req.params.id
+    const userID = req.session.user._id
+
+    // Try and delete retweet
+    const deletedPost = await Post.findOneAndDelete({postedBy: userID, retweetData: postID})
+        .catch(err => console.log(err))
+
+    const option = deletedPost != null ? "$pull" : "$addToSet"
+
+    return res.status(200).json({status: true, option})
+
+    // Insert user likes
+    // await User
+    //     .findByIdAndUpdate(userID, {[option]: {likes: postID}}, {new: true})
+    //     .exec()
+    //     .then(async data => {
+    //         req.session.user = data
+    //
+    //         // Insert post likes
+    //         await Post
+    //             .findByIdAndUpdate(postID, {[option]: {likes: userID}}, {new: true})
+    //             .exec()
+    //             .then(data => {
+    //                 console.log('post>>>', data.likes.length)
+    //                 res
+    //                     .status(201)
+    //                     .json({status: true, data, likes: data.likes.length})
+    //             })
+    //             .catch(err => next(err))
+    //
+    //
+    //         // res
+    //         //     .status(201)
+    //         //     .json({status: true, data, likes: data.likes.length})
+    //     })
+    //     .catch(err => next(err))
 
 
 };
