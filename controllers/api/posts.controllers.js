@@ -107,35 +107,44 @@ exports.retweetPost = async (req, res, next) => {
     const deletedPost = await Post.findOneAndDelete({postedBy: userID, retweetData: postID})
         .catch(err => console.log(err))
 
+    /*
+    * если null, то добавить
+    * если не null, то удалить
+    */
     const option = deletedPost != null ? "$pull" : "$addToSet"
+    let repost = deletedPost
 
-    return res.status(200).json({status: true, option})
+    if(repost === null){
+        repost = await Post.create({postedBy: userID, retweetData: postID})
+            .catch(err => next(err))
+    }
 
     // Insert user likes
-    // await User
-    //     .findByIdAndUpdate(userID, {[option]: {likes: postID}}, {new: true})
-    //     .exec()
-    //     .then(async data => {
-    //         req.session.user = data
-    //
-    //         // Insert post likes
-    //         await Post
-    //             .findByIdAndUpdate(postID, {[option]: {likes: userID}}, {new: true})
-    //             .exec()
-    //             .then(data => {
-    //                 console.log('post>>>', data.likes.length)
-    //                 res
-    //                     .status(201)
-    //                     .json({status: true, data, likes: data.likes.length})
-    //             })
-    //             .catch(err => next(err))
-    //
-    //
-    //         // res
-    //         //     .status(201)
-    //         //     .json({status: true, data, likes: data.likes.length})
-    //     })
-    //     .catch(err => next(err))
+    await User
+        .findByIdAndUpdate(userID, {[option]: {retweets: repost._id}}, {new: true})
+        .exec()
+        .then(async data => {
+            req.session.user = data
+
+            // Insert post likes
+            await Post
+                .findByIdAndUpdate(postID, {[option]: {retweetUsers: userID}}, {new: true})
+                .exec()
+                .then(data => {
+                    console.log('post>>>', data.likes.length)
+                    res
+                        .status(201)
+                        .json({status: true, data, likes: data.likes.length})
+                    
+                })
+                .catch(err => next(err))
+
+
+            // res
+            //     .status(201)
+            //     .json({status: true, data, likes: data.likes.length})
+        })
+        .catch(err => next(err))
 
 
 };
