@@ -7,6 +7,9 @@
     --greyText: rgb(101, 119, 134);
     --greyButtonText: rgba(0,0,0,0.34);
     --red: rgb(255, 0, 0);
+    --redBackground: rgba(226, 34, 94, 0.1);
+    --green: rgb(33, 169, 0);
+    --greenBackground: rgba(23, 191, 99, 0.1);
 }
 
 /* apply to all stuff */
@@ -194,4 +197,18 @@ button span {
 
 .postButtonContainer.red button.active {
     color: var(--red);
+}
+
+.postButtonContainer.red button:hover {
+    color: var(--red);
+    background-color: var(--redBackground);
+}
+
+.postButtonContainer.green button.active {
+    color: var(--green);
+}
+
+.postButtonContainer.green button:hover {
+    color: var(--green);
+    background-color: var(--greenBackground);
 }
