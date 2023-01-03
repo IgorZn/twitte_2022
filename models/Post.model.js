@@ -14,7 +14,7 @@ const PostSchema = new mongoose.Schema({
     pinned: Boolean,
     likes: [{ type: 'ObjectId', ref: 'User', required: true }], // ПОЛЬЗОВАТЕЛИ, которым нра этот ПОСТ
     retweetUsers: [{ type: 'ObjectId', ref: 'User' }], // ПОЛЬЗОВАТЕЛИ, ретвитнули этот пост
-    retweetData: [{ type: 'ObjectId', ref: 'Post'}], // ПОЛЬЗОВАТЕЛИ, ретвитнули этот пост
+    retweetData: { type: 'ObjectId', ref: 'Post'}, // ССЫKКА, на ретвитнутый пост
 }, {timestamps: true});
 
 // PostSchema.pre('save', async function (next) {
@@ -23,5 +23,9 @@ const PostSchema = new mongoose.Schema({
 //         console.log(140)
 //     }
 // })
+
+PostSchema.pre('find', async function (next) {
+    this.populate('retweetData')
+})
 
 module.exports = mongoose.model('Post', PostSchema);

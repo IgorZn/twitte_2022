@@ -23,6 +23,7 @@ $("#submitPostButton").click(() => {
     }
 
     $.post("/api/v1/posts", data, postData => {
+        console.log('to >> createPostHTML', postData)
         let html = createPostHTML(postData.data)
         $(".postContainer").prepend(html)
         textbox.val("")
@@ -35,14 +36,14 @@ $(document).on("click", ".likeButton", (event) => {
     let button = $(event.target);
     let postId = getPostIdFromElement(button);
 
-    if(postId === undefined) return;
+    if (postId === undefined) return;
 
     $.ajax({
         url: `/api/v1/posts/${postId}/like`,
         type: "PUT",
         success: (postData) => {
             button.find("span").text(postData.likes || "");
-            if(postData.data.likes.includes(userLoggedJs._id)){
+            if (postData.data.likes.includes(userLoggedJs._id)) {
                 button.addClass("active")
             } else {
                 button.removeClass("active")
@@ -56,7 +57,7 @@ $(document).on("click", ".retweetButton", (event) => {
     let button = $(event.target);
     let postId = getPostIdFromElement(button);
 
-    if(postId === undefined) return;
+    if (postId === undefined) return;
 
     $.ajax({
         url: `/api/v1/posts/${postId}/retweet`,
@@ -64,7 +65,7 @@ $(document).on("click", ".retweetButton", (event) => {
         success: (postData) => {
             console.log(postData)
             button.find("span").text(postData.data.retweetUsers.length || "");
-            if(postData.data.retweetUsers.includes(userLoggedJs._id)){
+            if (postData.data.retweetUsers.includes(userLoggedJs._id)) {
                 button.addClass("active")
             } else {
                 button.removeClass("active")
@@ -94,6 +95,29 @@ function getPostIdFromElement(element) {
 
 
 function createPostHTML(postData) {
+    console.log('just come -postData-', postData)
+    if (!postData) return alert('Postdata is NULL')
+    const isRetweet = postData.retweetData !== undefined;
+    console.log('isRetweet>>', isRetweet)
+    // who's that retweet
+    const retweetedBy = isRetweet ? postData.postedBy.username : null
+    /*
+    *  Обновить postData на содержимое postData.retweetData если это
+    *  ретвит
+    */
+    postData = isRetweet ? postData.retweetData : postData
+
+    // console.log(retweetedBy)
+    // console.log('before createdAt -createdAt-', postData)
+
+    let retweetText = '';
+    if (isRetweet) {
+        retweetText = `<span>
+                        <i class='fas fa-retweet'></i>
+                        Retweeted by <a href='/profile/${retweetedBy}'>@${retweetedBy}</a>    
+                    </span>`
+    }
+
     const createdAt = timeDifference(new Date(), new Date(postData.createdAt))
     const postedBy = postData.postedBy
     const dataId = postData._id
@@ -101,6 +125,9 @@ function createPostHTML(postData) {
     const likeButtonActiveClass = postData.likes.includes(userLoggedJs._id) ? "active" : "";
     const retweetButtonActiveClass = postData.retweetUsers.includes(userLoggedJs._id) ? "active" : "";
     return `<div class='post' data-id='${dataId}' data-bar="some-bar-value">
+                <div class="postActionContainer">
+                    ${retweetText}
+                </div>
                 <div class='mainContentContainer'>
                     <div class='userImageContainer'>
                         <img src='${postedBy.profilePic}'>

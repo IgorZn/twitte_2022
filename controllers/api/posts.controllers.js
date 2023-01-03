@@ -167,7 +167,9 @@ exports.getPosts = async (req, res, next) => {
         })
         .sort('field -createdAt') // по возрастания, а без "-" по убыванию
         .exec()
-        .then(data => {
+        .then(async data => {
+            // To make retweet post display normally as regular post with first and second name and so on...
+            data = await User.populate(data, {path: 'retweetData.postedBy'})
             res
                 .status(200)
                 .json({success: true, data})
