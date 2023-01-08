@@ -143,7 +143,7 @@ function createPostHTML(postData) {
                         </div>
                         <div class='postFooter'>
                             <div class='postButtonContainer'>
-                                <button>
+                                <button type="button" data-toggle="modal" data-target="#replayModal">
                                     <i class='far fa-comment'></i>
                                 </button>
                             </div>

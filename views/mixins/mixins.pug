@@ -7,3 +7,18 @@ mixin createPostForm(user)
             textarea#postTextarea(placeholder="What's happening?" maxlength='150')
             .buttonsContainer
                 button#submitPostButton(disabled="") Post
+
+mixin createReplyModal(userLoggedJs)
+    // Modal
+    #replayModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='replayModalTitle', aria-hidden='true')
+        .modal-dialog.modal-dialog-centered(role='document')
+            .modal-content
+                .modal-header
+                    h5#replayModalLongTitle.modal-title Replay
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    | ...
+                .modal-footer
+                    button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+                    button#submitReplayButton.btn.btn-primary(type='button') Replay
