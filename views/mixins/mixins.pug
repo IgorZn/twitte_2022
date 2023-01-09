@@ -18,7 +18,12 @@ mixin createReplyModal(userLoggedJs)
                     button.close(type='button', data-dismiss='modal', aria-label='Close')
                         span(aria-hidden='true') &times;
                 .modal-body
-                    | ...
+                    .postFormContainer
+                        .userImageContainer
+                            if user.profilePic
+                                img(src=user.profilePic, alt="User's profile picture")
+                        .textareaContainer
+                            textarea#replayTextarea(placeholder="What's happening?" maxlength='150')
                 .modal-footer
                     button.btn.btn-secondary(type='button', data-dismiss='modal') Close
-                    button#submitReplayButton.btn.btn-primary(type='button') Replay
+                    button#submitReplayButton.btn.btn-primary(type='button' disabled="") Replay

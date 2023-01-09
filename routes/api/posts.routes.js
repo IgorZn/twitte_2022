@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Controllers
-const {addPost, getPosts, likePost, retweetPost} = require("../../controllers/api/posts.controllers");
+const {addPost, getPosts, likePost, retweetPost, getPostByID} = require("../../controllers/api/posts.controllers");
 const {requireLogin} = require("../../middleware/auth.middleware");
 
 
@@ -16,5 +16,8 @@ router.route('/:id/like')
 
 router.route('/:id/retweet')
     .post(requireLogin, retweetPost)
+
+router.route('/:id')
+    .get(requireLogin, getPostByID)
 
 module.exports = router;

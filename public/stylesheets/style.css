@@ -94,6 +94,12 @@ button span {
     flex: 1;
 }
 
+.modal .postFormContainer {
+    border: none;
+    padding: 0;
+    padding-top: var(--spacing);
+}
+
 .postFormContainer {
     display: flex;
     padding: var(--spacing);

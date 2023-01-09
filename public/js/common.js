@@ -1,7 +1,8 @@
-$("#postTextarea").keyup(event => {
+$("#postTextarea, #replayTextarea").keyup(event => {
     let textbox = $(event.target);
     let value = textbox.val().trim();
-    let submitButton = $("#submitPostButton");
+    let isModal = textbox.parents(".modal").length == 1;
+    let submitButton = isModal ? $("#submitReplayButton") : $("#submitPostButton");
 
     if (submitButton.length == 0) return alert("No submit button found");
 
@@ -31,6 +32,15 @@ $("#submitPostButton").click(() => {
     })
 })
 
+$("#replayModal").on("show.bs.modal", (event) => {
+    let button = $(event.relatedTarget);
+    let postId = getPostIdFromElement(button);
+
+    $.get("/api/v1/posts/" + postId, results => {
+        console.log("show.bs.modal", results)
+        // outputPosts(results.data, $(".postContainer"))
+    })
+})
 
 $(document).on("click", ".likeButton", (event) => {
     let button = $(event.target);
