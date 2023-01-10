@@ -33,38 +33,23 @@ exports.addPost = async (req, res, next) => {
 
 };
 
+
 // @desc        Get post by ID
 // @route       GET /api/v1/posts/:id
 // @access      Private
 exports.getPostByID = async (req, res, next) => {
-    res
-        .status(201)
-        .json({success: true, data: 'getPostByID'})
+    await Post.findById(req.params.id)
+        .populate({
+            path: 'postedBy',
+            select: 'firstName lastName username profilePic'
+        })
+        .then(data => {
+            res
+                .status(201)
+                .json({success: true, data})
+        })
+        .catch(err => next(err))
 
-    // if (!req.body.content) {
-    //     console.log("Content is empty")
-    //     return res
-    //         .status(400)
-    //         .json({success: true, data: "No data in content"});
-    // }
-    //
-    // const context = {
-    //     content: req.body.content,
-    //     postedBy: req.session.user
-    // }
-    //
-    // await Post.create(context)
-    //     .then(async data => {
-    //         const populatedData = await User.populate(data, {path: 'postedBy'})
-    //         res
-    //             .status(201)
-    //             .json({success: true, data: populatedData})
-    //     })
-    //     .catch(err => {
-    //         res
-    //             .status(403)
-    //             .json({status: false, data: `content is longer than the maximum allowed length (140)`})
-    //     })
 
 };
 
@@ -149,7 +134,7 @@ exports.retweetPost = async (req, res, next) => {
     const option = deletedPost != null ? "$pull" : "$addToSet"
     let repost = deletedPost
 
-    if(repost === null){
+    if (repost === null) {
         repost = await Post.create({postedBy: userID, retweetData: postID})
             .catch(err => next(err))
     }
@@ -170,7 +155,7 @@ exports.retweetPost = async (req, res, next) => {
                     res
                         .status(201)
                         .json({status: true, data, likes: data.likes.length})
-                    
+
                 })
                 .catch(err => next(err))
 
@@ -189,7 +174,7 @@ exports.retweetPost = async (req, res, next) => {
 // @route       GET /api/v1/posts
 // @access      Private
 exports.getPosts = async (req, res, next) => {
-    if(!req.session.user){
+    if (!req.session.user) {
         res
             .status(404)
             .redirect('/login')

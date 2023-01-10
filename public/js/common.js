@@ -14,7 +14,6 @@ $("#postTextarea, #replayTextarea").keyup(event => {
     submitButton.prop("disabled", false);
 })
 
-
 $("#submitPostButton").click(() => {
     let button = $(event.target);
     let textbox = $("#postTextarea");
@@ -38,8 +37,12 @@ $("#replayModal").on("show.bs.modal", (event) => {
 
     $.get("/api/v1/posts/" + postId, results => {
         console.log("show.bs.modal", results)
-        // outputPosts(results.data, $(".postContainer"))
+        outputPosts(results.data, $("#originalPostContainer"))
     })
+})
+
+$("#replayModal").on("hidden.bs.modal", (event) => {
+    $("#originalPostContainer").html("")
 })
 
 $(document).on("click", ".likeButton", (event) => {
@@ -85,6 +88,7 @@ $(document).on("click", ".retweetButton", (event) => {
 
 })
 
+// -------
 
 function getPostIdFromElement(element) {
     const isRoot = element.hasClass("post");
@@ -200,5 +204,24 @@ function timeDifference(current, previous) {
         return Math.round(elapsed / msPerMonth) + ' months ago';
     } else {
         return Math.round(elapsed / msPerYear) + ' years ago';
+    }
+}
+
+
+function outputPosts(results, container) {
+    container.html("");
+
+    // convert to an array if not
+    if(!Array.isArray(results)){
+        results = [results]
+    }
+
+    results.forEach(result => {
+        const html = createPostHTML(result)
+        container.append(html);
+    });
+
+    if (results.length == 0) {
+        container.append("<span class='noResults'>Nothing to show.</span>")
     }
 }
