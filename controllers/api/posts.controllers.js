@@ -6,7 +6,9 @@ const colors = require('colors');
 // @route       POST /api/v1/posts
 // @access      Private
 exports.addPost = async (req, res, next) => {
-    if (!req.body.content) {
+    console.log(req.body)
+    const {content, replyTo } = req.body
+    if (!content) {
         console.log("Content is empty")
         return res
             .status(400)
@@ -14,8 +16,9 @@ exports.addPost = async (req, res, next) => {
     }
 
     const context = {
-        content: req.body.content,
-        postedBy: req.session.user
+        content,
+        postedBy: req.session.user,
+        replyTo
     }
 
     await Post.create(context)

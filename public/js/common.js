@@ -14,26 +14,40 @@ $("#postTextarea, #replayTextarea").keyup(event => {
     submitButton.prop("disabled", false);
 })
 
-$("#submitPostButton").click(() => {
+$("#submitPostButton, #submitReplayButton").click(() => {
     let button = $(event.target);
-    let textbox = $("#postTextarea");
+
+    let isModal = button.parents(".modal").length == 1;
+    let textbox = isModal ? $("#replayTextarea") : $("#postTextarea")
 
     let data = {
         content: textbox.val()
     }
 
+    if (isModal) {
+        let postID = button.data().id
+        if (!postID) return alert("ID is null");
+        data.replyTo = postID;
+    }
+
     $.post("/api/v1/posts", data, postData => {
-        console.log('to >> createPostHTML', postData)
-        let html = createPostHTML(postData.data)
-        $(".postContainer").prepend(html)
-        textbox.val("")
-        button.prop("disable", true)
+        if (postData.data.replyTo) {
+            location.reload()
+        } else {
+            // console.log('to >> createPostHTML', postData)
+            let html = createPostHTML(postData.data)
+            $(".postContainer").prepend(html)
+            textbox.val("")
+            button.prop("disable", true)
+        }
+
     })
 })
 
 $("#replayModal").on("show.bs.modal", (event) => {
     let button = $(event.relatedTarget);
     let postId = getPostIdFromElement(button);
+    $("#submitReplayButton").data("id", postId);
 
     $.get("/api/v1/posts/" + postId, results => {
         console.log("show.bs.modal", results)
@@ -212,7 +226,7 @@ function outputPosts(results, container) {
     container.html("");
 
     // convert to an array if not
-    if(!Array.isArray(results)){
+    if (!Array.isArray(results)) {
         results = [results]
     }
 

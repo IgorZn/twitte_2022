@@ -15,6 +15,7 @@ const PostSchema = new mongoose.Schema({
     likes: [{ type: 'ObjectId', ref: 'User', required: true }], // ПОЛЬЗОВАТЕЛИ, которым нра этот ПОСТ
     retweetUsers: [{ type: 'ObjectId', ref: 'User' }], // ПОЛЬЗОВАТЕЛИ, ретвитнули этот пост
     retweetData: { type: 'ObjectId', ref: 'Post'}, // ССЫKКА, на ретвитнутый пост
+    replyTo: { type: 'ObjectId', ref: 'Post'},
 }, {timestamps: true});
 
 // PostSchema.pre('save', async function (next) {
