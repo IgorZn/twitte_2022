@@ -146,6 +146,15 @@ function createPostHTML(postData) {
                     </span>`
     }
 
+    let replyFlag = "";
+    if(postData.replyTo){
+        checkPopulate(postData)
+        let replyToUser = postData.replyTo.postedBy.username
+        replyFlag = `<div class='replyFlag'>
+                        Replying to <a href='/profile/${replyToUser}'>@${replyToUser}<a>
+                    </div>`;
+    }
+
     const createdAt = timeDifference(new Date(), new Date(postData.createdAt))
     const postedBy = postData.postedBy
     const dataId = postData._id
@@ -166,6 +175,7 @@ function createPostHTML(postData) {
                             <span class='username'>@${postedBy.username}</span>
                             <span class='date'>${createdAt}</span>
                         </div>
+                        ${replyFlag}
                         <div class='postBody'>
                             <span>${postData.content}</span>
                         </div>
@@ -238,4 +248,14 @@ function outputPosts(results, container) {
     if (results.length == 0) {
         container.append("<span class='noResults'>Nothing to show.</span>")
     }
+}
+
+function checkPopulate(data){
+        if(!data.replyTo._id){
+            return alert('Reply to is not populated');
+        }
+
+        if(!data.replyTo.postedBy._id){
+            return alert('Posted by is not populated');
+        }
 }

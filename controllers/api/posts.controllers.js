@@ -188,10 +188,12 @@ exports.getPosts = async (req, res, next) => {
             path: 'postedBy',
             select: 'firstName lastName username profilePic'
         })
+        .populate('replyTo')
         .sort('field -createdAt') // по возрастания, а без "-" по убыванию
         .exec()
         .then(async data => {
             // To make retweet post display normally as regular post with first and second name and so on...
+            data = await User.populate(data, {path: 'replyTo.postedBy'})
             data = await User.populate(data, {path: 'retweetData.postedBy'})
             res
                 .status(200)
