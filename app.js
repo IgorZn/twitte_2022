@@ -36,10 +36,11 @@ app.use(
 /* Routes */
 const indexRouter = require('./routes/index.routes');
 const usersRouter = require('./routes/users.routes');
-const {routerLogin, routerRegister, routerLogout} = require('./routes/auth.routes')
+const postRouter = require('./routes/postPage.routes');
+const {routerLogin, routerRegister, routerLogout} = require('./routes/auth.routes');
 
 /* API routes*/
-const postsRoutes = require('./routes/api/posts.routes')
+const postsRoutes = require('./routes/api/posts.routes');
 
 /* View engine setup */
 app.set('views', path.join(__dirname, 'views'));
@@ -54,9 +55,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /* Mount routes */
 app.use('/', indexRouter);
-app.use('/login', routerLogin)
-app.use('/register', routerRegister)
-app.use('/logout', routerLogout)
+app.use('/post', postRouter);
+app.use('/login', routerLogin);
+app.use('/register', routerRegister);
+app.use('/logout', routerLogout);
 app.use('/users', usersRouter);
 
 /* Api routes*/

@@ -6,6 +6,7 @@ const {index} = require("../controllers/index.controllers");
 
 /* Middleware */
 const {requireLogin} = require("../middleware/auth.middleware");
+const {postPage} = require("../controllers/postPage.controllers");
 
 /* GET home page. */
 router.route('/')

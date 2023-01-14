@@ -46,12 +46,22 @@ exports.getPostByID = async (req, res, next) => {
             path: 'postedBy',
             select: 'firstName lastName username profilePic'
         })
-        .then(data => {
+        .then(async data => {
+            const context = {
+                success: true,
+                data,
+            }
+            const replies = await Post.getPosts({replyTo: data._id})
+            if(replies.length > 0) context.replies = replies
+
             res
                 .status(201)
-                .json({success: true, data})
+                .json(context)
         })
-        .catch(err => next(err))
+        .catch(err => {
+            console.log(`${err}`.bgRed)
+            next(err)
+        })
 
 
 };

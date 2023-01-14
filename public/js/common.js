@@ -102,6 +102,16 @@ $(document).on("click", ".retweetButton", (event) => {
 
 })
 
+$(document).on("click", ".post", (event) => {
+    let element = $(event.target);
+    let postID = getPostIdFromElement(element);
+
+    if(postID && !element.is("button")){
+        window.location.href = '/post/' + postID
+    }
+
+})
+
 // -------
 
 function getPostIdFromElement(element) {
@@ -123,10 +133,10 @@ function getPostIdFromElement(element) {
 
 
 function createPostHTML(postData) {
-    console.log('just come -postData-', postData)
+    // console.log('just come -postData-', postData)
     if (!postData) return alert('Postdata is NULL')
     const isRetweet = postData.retweetData !== undefined;
-    console.log('isRetweet>>', isRetweet)
+    // console.log('isRetweet>>', isRetweet)
     // who's that retweet
     const retweetedBy = isRetweet ? postData.postedBy.username : null
     /*

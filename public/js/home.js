@@ -4,5 +4,3 @@ $(document).ready(() => {
         outputPosts(results.data, $(".postContainer"))
     })
 })
-
-
