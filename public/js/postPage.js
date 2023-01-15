@@ -7,6 +7,6 @@ $(document).ready(() => {
     * */
     $.get("/api/v1/posts/" + postId, results => {
         console.log(results)
-        outputPosts(results.data, $(".postContainer"))
+        outPutWithReplies(results, $(".postContainer"))
     })
 })

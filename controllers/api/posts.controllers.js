@@ -46,11 +46,14 @@ exports.getPostByID = async (req, res, next) => {
             path: 'postedBy',
             select: 'firstName lastName username profilePic'
         })
+        .populate('replyTo')
         .then(async data => {
+            data = await User.populate(data, {path: 'replyTo.postedBy'})
             const context = {
                 success: true,
                 data,
             }
+
             const replies = await Post.getPosts({replyTo: data._id})
             if(replies.length > 0) context.replies = replies
 

@@ -43,6 +43,7 @@ PostSchema.static({
             .then(async data => {
                 // To make retweet post display normally as regular post with first and second name and so on...
                 data = await User.populate(data, {path: 'replyTo.postedBy'})
+                // console.log('getPosts>>', data)
                 return  await User.populate(data, {path: 'retweetData.postedBy'})
             })
             .catch(err => console.log(err))

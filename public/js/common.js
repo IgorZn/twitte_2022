@@ -106,7 +106,7 @@ $(document).on("click", ".post", (event) => {
     let element = $(event.target);
     let postID = getPostIdFromElement(element);
 
-    if(postID && !element.is("button")){
+    if (postID && !element.is("button")) {
         window.location.href = '/post/' + postID
     }
 
@@ -157,7 +157,7 @@ function createPostHTML(postData) {
     }
 
     let replyFlag = "";
-    if(postData.replyTo){
+    if (postData.replyTo && postData.replyTo._id) {
         checkPopulate(postData)
         let replyToUser = postData.replyTo.postedBy.username
         replyFlag = `<div class='replyFlag'>
@@ -260,12 +260,34 @@ function outputPosts(results, container) {
     }
 }
 
-function checkPopulate(data){
-        if(!data.replyTo._id){
-            return alert('Reply to is not populated');
-        }
 
-        if(!data.replyTo.postedBy._id){
-            return alert('Posted by is not populated');
-        }
+function checkPopulate(data) {
+    if (!data.replyTo._id) {
+        return alert('Reply to is not populated');
+    }
+
+    if (!data.replyTo.postedBy._id) {
+        return alert('Posted by is not populated');
+    }
+}
+
+
+function outPutWithReplies(results, container) {
+    container.html("");
+
+    if (Object.keys(results.data).includes('replyTo')) {
+        const html = createPostHTML(results.data.replyTo)
+        container.append(html);
+    }
+
+    const mainPostHtml = createPostHTML(results.data)
+    container.append(mainPostHtml);
+
+    if (Object.keys(results).includes('replies')) {
+        results.replies.forEach(result => {
+            const html = createPostHTML(result)
+            container.append(html);
+        });
+    }
+
 }
