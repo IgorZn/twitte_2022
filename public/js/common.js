@@ -55,6 +55,19 @@ $("#replayModal").on("show.bs.modal", (event) => {
     })
 })
 
+$("#deletePostModal").on("show.bs.modal", (event) => {
+    let button = $(event.relatedTarget);
+    let postId = getPostIdFromElement(button);
+    $("#deletePostButton").data("id", postId);
+
+    console.log($("#deletePostButton").data().id)
+
+    // $.get("/api/v1/posts/" + postId, results => {
+    //     console.log("show.bs.modal", results)
+    //     outputPosts(results.data, $("#originalPostContainer"))
+    // })
+})
+
 $("#replayModal").on("hidden.bs.modal", (event) => {
     $("#originalPostContainer").html("")
 })
@@ -132,7 +145,7 @@ function getPostIdFromElement(element) {
 }
 
 
-function createPostHTML(postData) {
+function createPostHTML(postData, largeFont = false) {
     // console.log('just come -postData-', postData)
     if (!postData) return alert('Postdata is NULL')
     const isRetweet = postData.retweetData !== undefined;
@@ -171,7 +184,15 @@ function createPostHTML(postData) {
     const displayName = postedBy.firstName + ' ' + postedBy.lastName
     const likeButtonActiveClass = postData.likes.includes(userLoggedJs._id) ? "active" : "";
     const retweetButtonActiveClass = postData.retweetUsers.includes(userLoggedJs._id) ? "active" : "";
-    return `<div class='post' data-id='${dataId}' data-bar="some-bar-value">
+    const largeFontClass = largeFont ? "largeFont" : "";
+
+    let buttons = "";
+    if (postData.postedBy._id == userLoggedJs._id) {
+        buttons = `<button data-id="${postData._id}" data-toggle="modal" data-target="#deletePostModal">
+                    <i class='fas fa-times'></i></button>`;
+    }
+
+    return `<div class='post ${largeFontClass}' data-id='${dataId}' data-bar="some-bar-value">
                 <div class="postActionContainer">
                     ${retweetText}
                 </div>
@@ -184,6 +205,7 @@ function createPostHTML(postData) {
                             <a href='/profile/${postedBy.username}'>${displayName}</a>
                             <span class='username'>@${postedBy.username}</span>
                             <span class='date'>${createdAt}</span>
+                            ${buttons}
                         </div>
                         ${replyFlag}
                         <div class='postBody'>
@@ -280,7 +302,7 @@ function outPutWithReplies(results, container) {
         container.append(html);
     }
 
-    const mainPostHtml = createPostHTML(results.data)
+    const mainPostHtml = createPostHTML(results.data, true)
     container.append(mainPostHtml);
 
     if (Object.keys(results).includes('replies')) {
