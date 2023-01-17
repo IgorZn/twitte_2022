@@ -7,7 +7,7 @@ const colors = require('colors');
 // @access      Private
 exports.addPost = async (req, res, next) => {
     console.log(req.body)
-    const {content, replyTo } = req.body
+    const {content, replyTo} = req.body
     if (!content) {
         console.log("Content is empty")
         return res
@@ -55,7 +55,7 @@ exports.getPostByID = async (req, res, next) => {
             }
 
             const replies = await Post.getPosts({replyTo: data._id})
-            if(replies.length > 0) context.replies = replies
+            if (replies.length > 0) context.replies = replies
 
             res
                 .status(201)
@@ -124,6 +124,33 @@ exports.likePost = async (req, res, next) => {
             // res
             //     .status(201)
             //     .json({status: true, data, likes: data.likes.length})
+        })
+        .catch(err => next(err))
+
+
+};
+
+
+// @desc        Delete post
+// @route       DELETE /api/v1/:id
+// @access      Private
+exports.deletePost = async (req, res, next) => {
+    const postID = req.params.id
+    const userID = req.session.user._id
+
+    await Post.findById(postID)
+        .exec()
+        .then(async result => {
+            if (result.postedBy.toString() === userID) {
+                await Post.findByIdAndDelete(postID)
+                    .exec()
+                    .then(delResult => {
+                        return res
+                            .status(202)
+                            .json({success: true, data: delResult})
+                    })
+                    .catch(err => next(err))
+            }
         })
         .catch(err => next(err))
 
@@ -210,7 +237,7 @@ exports.getPosts = async (req, res, next) => {
             data = await User.populate(data, {path: 'retweetData.postedBy'})
             res
                 .status(200)
-                .json({success: true, data})
+                .json({success: true, data, count: data.length})
         })
         .catch(err => next(err))
 

@@ -59,13 +59,18 @@ $("#deletePostModal").on("show.bs.modal", (event) => {
     let button = $(event.relatedTarget);
     let postId = getPostIdFromElement(button);
     $("#deletePostButton").data("id", postId);
+})
 
-    console.log($("#deletePostButton").data().id)
-
-    // $.get("/api/v1/posts/" + postId, results => {
-    //     console.log("show.bs.modal", results)
-    //     outputPosts(results.data, $("#originalPostContainer"))
-    // })
+$("#deletePostButton").click((event) => {
+    const postID = $(event.target).data("id")
+    $.ajax({
+        url: `/api/v1/posts/${postID}`,
+        type: "DELETE",
+        success: (data, status, xhr) => {
+            location.reload()
+            console.log(data)
+        }
+    })
 })
 
 $("#replayModal").on("hidden.bs.modal", (event) => {
