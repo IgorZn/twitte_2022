@@ -32,8 +32,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "/images/profilePic.jpeg"
     },
-    likes: [{ type: 'ObjectId', ref: 'Post' }], // ПОСТЫ, понравившиеся  ПОЛЬЗОВАТЕЛЮ
-    retweets: [{ type: 'ObjectId', ref: 'Post' }], // ПОСТЫ, которые ретвитнули
+    likes: [{type: 'ObjectId', ref: 'Post'}], // ПОСТЫ, понравившиеся  ПОЛЬЗОВАТЕЛЮ
+    retweets: [{type: 'ObjectId', ref: 'Post'}], // ПОСТЫ, которые ретвитнули
 }, {
     timestamps: true
 });
@@ -56,6 +56,27 @@ UserSchema.static({
                 return result
             })
     },
+    getPayload: async function (username, userLoggedIn) {
+        return this.model('User')
+            .findOne({username})
+            .exec()
+            .then(user => {
+                if (user) {
+                    return {
+                        title: user.username,
+                        user: user,
+                        userLoggedJs: JSON.stringify(userLoggedIn),
+                        profileUser: user,
+                        status: true
+                    }
+                }
+
+                return {
+                    title: "User not found",
+                    status: false
+                }
+            })
+    }
 })
 
 module.exports = mongoose.model('User', UserSchema);

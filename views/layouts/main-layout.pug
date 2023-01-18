@@ -33,7 +33,10 @@ html
                         i.fas.fa-sign-out-alt
                 .mainSectionContainer.col-10.col-md-8.col-lg-6
                     .titleContainer
-                        h1 #{title}
+                        if status
+                            h1 #{title}
+                        else
+                            p.fs-6.fw-bolder.alert-danger #{title}
 
                     block content
 

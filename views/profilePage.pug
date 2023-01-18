@@ -1,0 +1,13 @@
+extends layouts/main-layout
+
+block content
+  if status
+    p #{user.username}
+    span #{user.firstName}
+    .postContainer
+
+    +createPostModals(user)
+  else
+
+block scripts
+  script(src='/js/profile.js')
