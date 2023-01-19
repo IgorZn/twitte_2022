@@ -57,11 +57,14 @@ UserSchema.static({
             })
     },
     getPayload: async function (username, userLoggedIn) {
-        return this.model('User')
-            .findOne({username})
-            .exec()
-            .then(user => {
-                if (user) {
+        const isThisID = mongoose.isValidObjectId(username)
+        // console.log('username, userLoggedIn >>', isThisID, username, userLoggedIn)
+        if (isThisID) {
+            // if username as ID
+            return this.model('User')
+                .findById(username)
+                .exec()
+                .then(user => {
                     return {
                         title: user.username,
                         user: user,
@@ -69,13 +72,30 @@ UserSchema.static({
                         profileUser: user,
                         status: true
                     }
-                }
+                })
+        } else {
+            // by username
+            return this.model('User')
+                .findOne({username})
+                .exec()
+                .then(user => {
+                    if (user) {
+                        return {
+                            title: user.username,
+                            user: user,
+                            userLoggedJs: JSON.stringify(userLoggedIn),
+                            profileUser: user,
+                            status: true
+                        }
+                    }
 
-                return {
-                    title: "User not found",
-                    status: false
-                }
-            })
+                    return {
+                        title: "User not found",
+                        status: false
+                    }
+                })
+        }
+
     }
 })
 

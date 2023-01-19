@@ -1,13 +1,22 @@
 extends layouts/main-layout
 
 block content
-  if status
-    p #{user.username}
-    span #{user.firstName}
-    .postContainer
+    if status
+        p #{user.username}
+        .profileHeaderContainer
+            .coverPhotoContainer
 
-    +createPostModals(user)
-  else
+                .userImageContainer
+                    img(src=user.profilePic, alt="User profile image")
+
+            .profileButtonsContainer
+                if user._id != userLoggedJs._id
+                    a.profileButton(href=`/messages/${user._id}`)
+                        i.fas.fa-envelope
+                    +createFollowButton(user, false)
+        .postContainer
+
+        +createPostModals(user)
 
 block scripts
-  script(src='/js/profile.js')
+    script(src='/js/profile.js')
