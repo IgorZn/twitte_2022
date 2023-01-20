@@ -223,19 +223,27 @@ exports.getPosts = async (req, res, next) => {
             .redirect('/login')
     }
 
-    await Post.find(({postedBy: req.session.user._id}))
+    const searchObj = req.query
+    console.log('searchObj>>>', searchObj)
+
+    if(!searchObj.isReply) {
+        const isReply = searchObj.isReply == "true"
+    }
+
+    return await Post.find(searchObj)
         .populate({
             path: 'postedBy',
             select: 'firstName lastName username profilePic'
         })
         .populate('replyTo')
+        .populate('retweetData')
         .sort('field -createdAt') // по возрастания, а без "-" по убыванию
         .exec()
         .then(async data => {
             // To make retweet post display normally as regular post with first and second name and so on...
             data = await User.populate(data, {path: 'replyTo.postedBy'})
             data = await User.populate(data, {path: 'retweetData.postedBy'})
-            res
+            return res
                 .status(200)
                 .json({success: true, data, count: data.length})
         })

@@ -298,3 +298,61 @@ button span {
 .followButton:hover {
     background-color: var(--blueBackground);
 }
+
+/* 130 */
+
+.followButton.following {
+    background-color: var(--blue);
+    color: #fff;
+}
+
+.profileHeaderContainer .userDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 0 var(--spacing);
+}
+
+.followersContainer .value {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.followersContainer span:not(.value) {
+    color: var(--greyText);
+}
+
+.followersContainer a {
+    margin-right: 15px;
+}
+
+.followersContainer a:hover {
+    border-bottom: 1px solid #000;
+}
+
+/* 132 */
+
+.tabsContainer {
+    display: flex;
+    border-bottom: 1px solid var(--lightGrey);
+    flex-shrink: 0;
+}
+
+.tab {
+    flex: 1;
+    height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--greyText);
+    font-weight: bold;
+}
+
+.tab.active {
+    color: var(--blue);
+    border-bottom: 2px solid var(--blue);
+}
+
+.tab:hover {
+    color: var(--blue);
+    background-color: var(--blueBackground);
+}

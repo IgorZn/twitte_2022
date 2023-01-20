@@ -3,6 +3,8 @@ extends layouts/main-layout
 block content
     if status
         p #{user.username}
+        script.
+            var profileUserId = '!{user._id}'
         .profileHeaderContainer
             .coverPhotoContainer
 
@@ -14,6 +16,23 @@ block content
                     a.profileButton(href=`/messages/${user._id}`)
                         i.fas.fa-envelope
                     +createFollowButton(user, false)
+
+            .userDetailsContainer
+                span.displayName #{user.firstName} #{user.lastName}
+                span.username @#{user.username}
+                span.description #{user.description}
+
+                .followersContainer
+                    a(href=`/profile/${user.username}/following`)
+                        span.value #{0}
+                        span Following
+                    a(href=`/profile/${user.username}/followers`)
+                        span.value #{0}
+                        span Followers
+
+        .tabsContainer
+            +createTab("Posts", `/profile/${user.username}`, true)
+            +createTab("Replies", `/profile/${user.username}/replies`, false)
         .postContainer
 
         +createPostModals(user)
