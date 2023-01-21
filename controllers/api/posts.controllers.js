@@ -224,12 +224,19 @@ exports.getPosts = async (req, res, next) => {
     }
 
     const searchObj = req.query
-    console.log('searchObj>>>', searchObj)
+    // console.log('searchObj>>>', searchObj)
 
     if(!searchObj.isReply) {
-        const isReply = searchObj.isReply == "true"
-    }
+        const isReply = searchObj.isReply == 'true'
+        /*
+        This query will select all documents in the Posts
+        collection where the replyTo field exists based on
+        'isReply' value - true/false
+         */
+        searchObj.replyTo = { $exists: isReply }
+        delete searchObj.isReply
 
+    }
     return await Post.find(searchObj)
         .populate({
             path: 'postedBy',

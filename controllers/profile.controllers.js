@@ -8,6 +8,6 @@ exports.profile = async (req, res, next) => {
     const username = req.params.username
     const user = req.session.user
     const payload = await User.getPayload(username, user)
-    console.log('Profile page>>>',user)
+    // console.log('Profile page>>>',user)
     res.render('profilePage', payload);
 };
