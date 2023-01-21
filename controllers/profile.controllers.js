@@ -5,7 +5,7 @@ const colors = require('colors');
 // @route       GET /
 // @access      Public
 exports.profile = async (req, res, next) => {
-    const username = req.params.username
+    const username = req.params.username || req.session.user.username
     const user = req.session.user
     const payload = await User.getPayload(username, user)
     // console.log('Profile page>>>',user)

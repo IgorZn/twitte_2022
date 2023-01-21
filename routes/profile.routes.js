@@ -8,6 +8,9 @@ const { profile, profileReplies} = require("../controllers/profile.controllers")
 const {requireLogin} = require("../middleware/auth.middleware");
 
 /* GET profile page. */
+router.route('/')
+    .get(requireLogin, profile);
+
 router.route('/:username')
     .get(requireLogin, profile);
 
