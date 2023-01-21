@@ -5,6 +5,7 @@ block content
         p #{user.username}
         script.
             var profileUserId = '!{user._id}'
+            var selectedTab = '!{selectedTab}'
         .profileHeaderContainer
             .coverPhotoContainer
 
@@ -31,8 +32,8 @@ block content
                         span Followers
 
         .tabsContainer
-            +createTab("Posts", `/profile/${user.username}`, true)
-            +createTab("Replies", `/profile/${user.username}/replies`, false)
+            +createTab("Posts", `/profile/${user.username}`, selectedTab != "replies")
+            +createTab("Replies", `/profile/${user.username}/replies`, selectedTab == "replies")
         .postContainer
 
         +createPostModals(user)

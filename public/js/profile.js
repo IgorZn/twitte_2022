@@ -1,13 +1,14 @@
 $(document).ready(() => {
-    loadPost()
+    const data = {
+        postedBy: profileUserId,
+        isReply: selectedTab.includes("replies")
+    }
+
+    loadPost(data)
 })
 
-const data = {
-    postedBy: profileUserId,
-    isReply: true
-}
 
-function loadPost() {
+function loadPost(data) {
     $.ajax({
         url: "/api/v1/posts",
         type: "GET",

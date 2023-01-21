@@ -224,9 +224,9 @@ exports.getPosts = async (req, res, next) => {
     }
 
     const searchObj = req.query
-    // console.log('searchObj>>>', searchObj)
 
-    if(!searchObj.isReply) {
+
+    if(searchObj.isReply) {
         const isReply = searchObj.isReply == 'true'
         /*
         This query will select all documents in the Posts
@@ -237,6 +237,8 @@ exports.getPosts = async (req, res, next) => {
         delete searchObj.isReply
 
     }
+    console.log('searchObj>>>', searchObj)
+
     return await Post.find(searchObj)
         .populate({
             path: 'postedBy',
