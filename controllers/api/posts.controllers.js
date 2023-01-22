@@ -226,14 +226,14 @@ exports.getPosts = async (req, res, next) => {
     const searchObj = req.query
 
 
-    if(searchObj.isReply) {
+    if (searchObj.isReply) {
         const isReply = searchObj.isReply == 'true'
         /*
         This query will select all documents in the Posts
         collection where the replyTo field exists based on
         'isReply' value - true/false
          */
-        searchObj.replyTo = { $exists: isReply }
+        searchObj.replyTo = {$exists: isReply}
         delete searchObj.isReply
 
     }

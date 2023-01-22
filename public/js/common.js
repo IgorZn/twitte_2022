@@ -130,6 +130,26 @@ $(document).on("click", ".post", (event) => {
 
 })
 
+$(document).on("click", ".followButton", (event) => {
+    const button = $(event.target);
+    const userId = button.data().user;
+
+    $.ajax({
+        url: `/api/v1/users/${userId}/follow`,
+        type: "PUT",
+        success: (postData) => {
+            console.log(postData)
+            // button.find("span").text(postData.data.retweetUsers.length || "");
+            // if (postData.data.retweetUsers.includes(userLoggedJs._id)) {
+            //     button.addClass("active")
+            // } else {
+            //     button.removeClass("active")
+            // }
+        }
+    })
+
+})
+
 // -------
 
 function getPostIdFromElement(element) {

@@ -34,6 +34,9 @@ const UserSchema = new mongoose.Schema({
     },
     likes: [{type: 'ObjectId', ref: 'Post'}], // ПОСТЫ, понравившиеся  ПОЛЬЗОВАТЕЛЮ
     retweets: [{type: 'ObjectId', ref: 'Post'}], // ПОСТЫ, которые ретвитнули
+    following: [{type: 'ObjectId', ref: 'User'}],
+    followers: [{type: 'ObjectId', ref: 'User'}],
+
 }, {
     timestamps: true
 });

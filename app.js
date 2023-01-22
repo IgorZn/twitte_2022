@@ -41,7 +41,8 @@ const profileRouter = require('./routes/profile.routes');
 const {routerLogin, routerRegister, routerLogout} = require('./routes/auth.routes');
 
 /* API routes*/
-const postsRoutes = require('./routes/api/posts.routes');
+const postsApiRoutes = require('./routes/api/posts.routes');
+const usersApiRoutes = require('./routes/api/users.routes');
 
 /* View engine setup */
 app.set('views', path.join(__dirname, 'views'));
@@ -64,7 +65,8 @@ app.use('/users', usersRouter);
 app.use('/profile', profileRouter);
 
 /* Api routes*/
-app.use('/api/v1/posts', postsRoutes);
+app.use('/api/v1/posts', postsApiRoutes);
+app.use('/api/v1/users', usersApiRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
