@@ -137,14 +137,18 @@ $(document).on("click", ".followButton", (event) => {
     $.ajax({
         url: `/api/v1/users/${userId}/follow`,
         type: "PUT",
-        success: (postData) => {
-            console.log(postData)
-            // button.find("span").text(postData.data.retweetUsers.length || "");
-            // if (postData.data.retweetUsers.includes(userLoggedJs._id)) {
-            //     button.addClass("active")
-            // } else {
-            //     button.removeClass("active")
-            // }
+        success: (result, status, xhr) => {
+            const data = result.data
+            if(xhr.status == 404){
+                console.log('User not found')
+                return
+            }
+
+            if (data.following && data.following.includes(userId)) {
+                button.addClass("following")
+            } else {
+                button.removeClass("following")
+            }
         }
     })
 

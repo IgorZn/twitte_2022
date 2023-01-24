@@ -16,6 +16,8 @@ block content
                 if user._id != userLoggedJs._id
                     a.profileButton(href=`/messages/${user._id}`)
                         i.fas.fa-envelope
+
+                    if userLoggedJs.following && userLoggedJs
                     +createFollowButton(user, false)
 
             .userDetailsContainer
