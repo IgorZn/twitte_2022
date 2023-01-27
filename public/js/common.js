@@ -139,6 +139,7 @@ $(document).on("click", ".followButton", (event) => {
         type: "PUT",
         success: (result, status, xhr) => {
             const data = result.data
+            console.log(result.data)
             if(xhr.status == 404){
                 console.log('User not found')
                 return

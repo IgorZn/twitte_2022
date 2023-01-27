@@ -17,8 +17,8 @@ exports.profile = async (req, res, next) => {
 // @access      Public
 exports.profileReplies = async (req, res, next) => {
     const username = req.params.username
-    const user = req.session.user
-    const payload = await User.getPayload(username, user)
+    const loggedInUser = req.session.user
+    const payload = await User.getPayload(username, loggedInUser)
     payload.selectedTab = 'replies'
     // console.log('Profile page>>>',user)
     res.render('profilePage', payload);

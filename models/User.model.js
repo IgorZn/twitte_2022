@@ -52,6 +52,9 @@ UserSchema.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, salt);
 })
 
+const isFollowing = (user, currentLoggedInUser) => {
+  return currentLoggedInUser.following && currentLoggedInUser.following.includes(user._id.toString())
+}
 UserSchema.static({
     matchPassword: async function (plainTextPassword, hashedPassword) {
         return await bcrypt.compare(plainTextPassword, hashedPassword)
@@ -73,6 +76,7 @@ UserSchema.static({
                         user: user,
                         userLoggedJs: JSON.stringify(userLoggedIn),
                         profileUser: user,
+                        isLoggedInUserFollower: isFollowing(user, JSON.stringify(userLoggedIn)),
                         status: true
                     }
                 })
@@ -87,6 +91,7 @@ UserSchema.static({
                             title: user.username,
                             user: user,
                             userLoggedJs: JSON.stringify(userLoggedIn),
+                            isLoggedInUserFollower: isFollowing(user, userLoggedIn),
                             profileUser: user,
                             status: true
                         }
