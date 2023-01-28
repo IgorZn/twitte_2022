@@ -145,10 +145,18 @@ $(document).on("click", ".followButton", (event) => {
                 return
             }
 
+            let diffFoll = 1
             if (data.following && data.following.includes(userId)) {
                 button.addClass("following")
             } else {
                 button.removeClass("following")
+                diffFoll = -1
+            }
+
+            let followersLabel = $('#followersValue')
+            if(followersLabel.length){
+                let followersText = followersLabel.text()
+                followersLabel.text(parseInt(followersText) + diffFoll)
             }
         }
     })

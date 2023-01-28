@@ -1,0 +1,18 @@
+extends layouts/main-layout
+
+block content
+    if status
+        p #{user.username}
+        script.
+            var profileUserId = '!{user._id}'
+            var selectedTab = '!{selectedTab}'
+
+    .tabsContainer
+        +createTab("Following", `/profile/${user.username}/following`, selectedTab != "followers")
+        +createTab("Followers", `/profile/${user.username}/followers`, selectedTab == "followers")
+
+    .resultContainer
+    // where we will populate the list of following and followers
+
+block scripts
+    script(src='/js/followers_following.js')

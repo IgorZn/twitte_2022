@@ -6,6 +6,11 @@ block content
         script.
             var profileUserId = '!{user._id}'
             var selectedTab = '!{selectedTab}'
+
+        - followersCount = user.followers.length
+        - followingCount = user.following.length
+
+
         .profileHeaderContainer
             .coverPhotoContainer
                 .userImageContainer
@@ -24,10 +29,10 @@ block content
 
                 .followersContainer
                     a(href=`/profile/${user.username}/following`)
-                        span.value #{0}
+                        span.value #{followingCount}
                         span Following
                     a(href=`/profile/${user.username}/followers`)
-                        span.value #{0}
+                        span#followersValue.value #{followersCount}
                         span Followers
 
         .tabsContainer
