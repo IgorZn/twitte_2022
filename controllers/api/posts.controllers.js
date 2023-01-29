@@ -229,6 +229,8 @@ exports.getPosts = async (req, res, next) => {
     if (searchObj.isReply) {
         const isReply = searchObj.isReply == 'true'
         /*
+        -- Content of Post and Replies tabs -- on PROFILE page
+
         This query will select all documents in the Posts
         collection where the replyTo field exists based on
         'isReply' value - true/false

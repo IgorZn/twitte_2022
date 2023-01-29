@@ -19,10 +19,10 @@ router.route('/:username/replies')
     .get(requireLogin, profileReplies);
 
 // Fg and Fs
-router.route('/:username/following')
+router.route('/:id/following')
     .get(requireLogin, profileFollowing);
 
-router.route('/:username/followers')
+router.route('/:id/followers')
     .get(requireLogin, profileFollowers);
 
 module.exports = router;

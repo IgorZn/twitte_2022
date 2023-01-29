@@ -1,4 +1,5 @@
 const User = require('../../models/User.model')
+const mongoose = require("mongoose");
 
 // @desc        Retweet post
 // @route       POST /api/v1/users/:id/follow
@@ -50,4 +51,56 @@ exports.follow = async (req, res, next) => {
 
         })
 
+};
+
+
+// @desc        Profile page
+// @route       GET /:id/following
+// @access      Public
+exports.ApiProfileFollowing = async (req, res, next) => {
+    console.log('Profile page>>>', req.params)
+    await User.findById(req.params.id)
+        .populate("following")
+        .then(data => {
+            res
+                .status(200)
+                .json({success: true, data});
+        })
+        .catch(err => next(err))
+
+    // const payload = {
+    //     title: 'Express PISIKO',
+    //     user: req.session.user,
+    //     userLoggedJs: JSON.stringify(req.session.user),
+    //     status: true
+    // }
+    // payload.selectedTab = 'following'
+
+};
+
+
+// @desc        Profile page
+// @route       GET /:id/followers
+// @access      Public
+exports.ApiProfileFollowers = async (req, res, next) => {
+    // console.log('Profile page>>>',user)
+    console.log('Profile page>>>', req.params)
+    await User.findById(req.params.id)
+        .populate("followers")
+        .then(data => {
+            res
+                .status(200)
+                .json({success: true, data});
+        })
+        .catch(err => next(err))
+
+
+    // const payload = {
+    //     title: 'Express PISIKO',
+    //     user: req.session.user,
+    //     userLoggedJs: JSON.stringify(req.session.user),
+    //     status: true
+    // }
+    // payload.selectedTab = 'followers'
+    // res.render('followers_and_following', payload);
 };

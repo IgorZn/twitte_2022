@@ -28,10 +28,10 @@ block content
                 span.description #{user.description}
 
                 .followersContainer
-                    a(href=`/profile/${user.username}/following`)
+                    a(href=`/profile/${user._id}/following`)
                         span.value #{followingCount}
                         span Following
-                    a(href=`/profile/${user.username}/followers`)
+                    a(href=`/profile/${user._id}/followers`)
                         span#followersValue.value #{followersCount}
                         span Followers
 
