@@ -361,4 +361,28 @@ button span {
 
 .wrapper > .row {
     margin: 0;
+}е
+
+
+/* 146 */
+.noResults {
+    padding: var(--spacing);
+}
+
+/* 147 */
+
+.resultsContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.resultsContainer .user {
+    padding: var(--spacing);
+    display: flex;
+    border-bottom: 1px solid var(--lightGrey);
+}
+
+.user .userDetailsContainer {
+    flex: 1;
+    padding: 0 var(--spacing)
 }
