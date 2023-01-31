@@ -217,6 +217,7 @@ exports.retweetPost = async (req, res, next) => {
 // @route       GET /api/v1/posts
 // @access      Private
 exports.getPosts = async (req, res, next) => {
+    console.log(req.query)
     if (!req.session.user) {
         res
             .status(404)
@@ -237,8 +238,23 @@ exports.getPosts = async (req, res, next) => {
          */
         searchObj.replyTo = {$exists: isReply}
         delete searchObj.isReply
+    }
+
+    if (searchObj.followingOnly) {
+        const followingOnly = searchObj.followingOnly == 'true'
+
+        if (followingOnly) {
+            const objIds = req.session.user.following
+
+            objIds.push(req.session.user._id)
+            searchObj.postedBy = {$in: objIds}
+        }
+
+        delete searchObj.followingOnly
 
     }
+
+
     console.log('searchObj>>>', searchObj)
 
     return await Post.find(searchObj)

@@ -18,11 +18,11 @@ function loadFF() {
         success: results => {
             console.log(results)
             if (selectedTab.includes('followers')) {
-                outputUser(results.data.followers, $(".resultContainer"))
+                outputUser(results.data.followers, $(".resultsContainer"))
             } else {
-                outputUser(results.data.following, $(".resultContainer"))
+                outputUser(results.data.following, $(".resultsContainer"))
             }
-            // outputPosts(results.data, $(".resultContainer"))
+            // outputPosts(results.data, $(".resultsContainer"))
         },
     })
 
