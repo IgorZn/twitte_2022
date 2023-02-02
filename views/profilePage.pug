@@ -1,6 +1,12 @@
 extends layouts/main-layout
 
 block content
+    p -----------
+    p userLoggedJs #{userLoggedJs.firstName}
+    p user._id #{user._id}
+    p user #{userId}
+
+
     if status
         p #{user.username}
         script.
@@ -15,6 +21,11 @@ block content
             .coverPhotoContainer
                 .userImageContainer
                     img(src=user.profilePic, alt="User profile image")
+
+
+                    if user._id == userId
+                        button.profilePictureButton(data-toggle="modal" data-target="#imageUploadModal")
+                            i.fas.fa-camera
 
             .profileButtonsContainer
                 if user._id != userLoggedJs._id
@@ -41,6 +52,7 @@ block content
         .postContainer
 
         +createPostModals(user)
+        +createImageUploadModal()
 
 block scripts
     script(src='/js/profile.js')

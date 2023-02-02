@@ -7,8 +7,10 @@ const colors = require('colors');
 exports.profile = async (req, res, next) => {
     const username = req.params.username || req.session.user.username
     const user = req.session.user
+    const userId = req.session.user._id.toString()
     const payload = await User.getPayload(username, user)
     // console.log('Profile page>>>',user)
+    payload.userId = userId
     res.render('profilePage', payload);
 };
 

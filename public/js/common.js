@@ -1,3 +1,5 @@
+// ------- On
+
 $("#postTextarea, #replayTextarea").keyup(event => {
     let textbox = $(event.target);
     let value = textbox.val().trim();
@@ -76,6 +78,19 @@ $("#deletePostButton").click((event) => {
 $("#replayModal").on("hidden.bs.modal", (event) => {
     $("#originalPostContainer").html("")
 })
+
+$("#filePhoto").change((event) => {
+    const input = $(event.target)[0];
+    if(input.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            $("#imagePreview").attr("src", e.target.result)
+        }
+        reader.readAsDataURL(...input.files)
+    }
+})
+
+// ------- Document
 
 $(document).on("click", ".likeButton", (event) => {
     let button = $(event.target);
@@ -163,7 +178,7 @@ $(document).on("click", ".followButton", (event) => {
 
 })
 
-// -------
+// ------- Function
 
 function getPostIdFromElement(element) {
     const isRoot = element.hasClass("post");
