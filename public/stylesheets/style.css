@@ -97,7 +97,7 @@ button span {
 
 .modal .postFormContainer {
     border: none;
-    padding: 0;
+    padding: 10px;
     padding-top: var(--spacing);
 }
 
@@ -402,4 +402,13 @@ button span {
 
 .userImageContainer:hover .profilePictureButton {
     display: block;
+}
+
+/* 155 */
+#imagePreview {
+    width: 100%;
+    display: block;
+
+    /* This rule is very important, please don't ignore this */
+    max-width: 100%;
 }

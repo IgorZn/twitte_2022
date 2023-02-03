@@ -1,4 +1,8 @@
-// ------- On
+// Globals
+let cropper
+
+
+// ------- On Event
 
 $("#postTextarea, #replayTextarea").keyup(event => {
     let textbox = $(event.target);
@@ -79,16 +83,6 @@ $("#replayModal").on("hidden.bs.modal", (event) => {
     $("#originalPostContainer").html("")
 })
 
-$("#filePhoto").change((event) => {
-    const input = $(event.target)[0];
-    if(input.files.length > 0) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            $("#imagePreview").attr("src", e.target.result)
-        }
-        reader.readAsDataURL(...input.files)
-    }
-})
 
 // ------- Document
 
@@ -155,7 +149,7 @@ $(document).on("click", ".followButton", (event) => {
         success: (result, status, xhr) => {
             const data = result.data
             console.log(result.data)
-            if(xhr.status == 404){
+            if (xhr.status == 404) {
                 console.log('User not found')
                 return
             }
@@ -169,7 +163,7 @@ $(document).on("click", ".followButton", (event) => {
             }
 
             let followersLabel = $('#followersValue')
-            if(followersLabel.length){
+            if (followersLabel.length) {
                 let followersText = followersLabel.text()
                 followersLabel.text(parseInt(followersText) + diffFoll)
             }
@@ -177,6 +171,33 @@ $(document).on("click", ".followButton", (event) => {
     })
 
 })
+
+
+// -- JS
+document
+    .getElementById("filePhoto")
+    .addEventListener('change', (event) => {
+            const reader = new FileReader();
+            const input = $(event.target)[0];
+            reader.onload = (e) => {
+                const image = document.getElementById("imagePreview")
+                image.src = e.target.result
+
+                if (cropper) {
+                    cropper.destroy()
+                }
+
+                cropper = new Cropper(image, {
+                    aspectRatio: 1 / 1,
+                    background: false,
+                });
+
+            }
+
+            reader.readAsDataURL(...input.files)
+
+        })
+
 
 // ------- Function
 
