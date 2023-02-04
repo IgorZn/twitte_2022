@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const connDB = require("./conf/db");
 const dotenv = require("dotenv");
+const fileUpload = require("express-fileupload");
 
 const session = require('express-session'),
     redisStorage = require('connect-redis')(session)
@@ -32,6 +33,16 @@ app.use(
         secret: process.env.SESSION_SECRET,
         saveUninitialized: true,
     }))
+
+// Simple express middleware for uploading files.
+app.use(fileUpload({
+    limits: {
+        fileSize: process.env.MAX_IMAGE_SIZE
+    },
+    useTempFiles : true,
+    tempFileDir : '/tmp/'
+
+}));
 
 /* Routes */
 const indexRouter = require('./routes/index.routes');

@@ -104,3 +104,11 @@ exports.ApiProfileFollowers = async (req, res, next) => {
     // payload.selectedTab = 'followers'
     // res.render('followers_and_following', payload);
 };
+
+
+// @desc        Profile picture
+// @route       POST /api/v1/users/profilePicture
+// @access      Private
+exports.ApiProfilePicture = async (req, res, next) => {
+    console.log('ApiProfilePicture', req.files); // the uploaded file object
+};

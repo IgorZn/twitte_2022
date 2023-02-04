@@ -177,27 +177,54 @@ $(document).on("click", ".followButton", (event) => {
 document
     .getElementById("filePhoto")
     .addEventListener('change', (event) => {
-            const reader = new FileReader();
-            const input = $(event.target)[0];
-            reader.onload = (e) => {
-                const image = document.getElementById("imagePreview")
-                image.src = e.target.result
+        const reader = new FileReader();
+        const input = $(event.target)[0];
+        reader.onload = (e) => {
+            const image = document.getElementById("imagePreview")
+            image.src = e.target.result
 
-                if (cropper) {
-                    cropper.destroy()
-                }
-
-                cropper = new Cropper(image, {
-                    aspectRatio: 1 / 1,
-                    background: false,
-                });
-
+            if (cropper) {
+                cropper.destroy()
             }
 
-            reader.readAsDataURL(...input.files)
+            cropper = new Cropper(image, {
+                aspectRatio: 1 / 1,
+                background: false,
+            });
 
-        })
+        }
 
+        reader.readAsDataURL(...input.files)
+
+    })
+
+document
+    .getElementById("imageUploadButton")
+    .onclick = () => {
+    const canvas = cropper.getCroppedCanvas()
+    if (!canvas) {
+        alert('Could not upload image')
+        return;
+    }
+
+    canvas.toBlob((blob) => {
+        const formData = new FormData();
+        formData.append("croppedImage", blob)
+
+        const options = {
+            method: 'POST',
+            body: formData
+        }
+
+        fetch("/api/v1/users/profilePicture", options)
+            .then(res => {
+                if(res.ok){
+                    location.reload()
+                }
+            })
+
+    })
+}
 
 // ------- Function
 
@@ -221,7 +248,7 @@ function getPostIdFromElement(element) {
 
 function createPostHTML(postData, largeFont = false) {
     // console.log('just come -postData-', postData)
-    if (!postData) return alert('Postdata is NULL')
+    if (!postData) return location.href = '/login'
     const isRetweet = postData.retweetData !== undefined;
     // console.log('isRetweet>>', isRetweet)
     // who's that retweet
