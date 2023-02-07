@@ -3,7 +3,7 @@ const router = express.Router();
 
 // Controllers
 const {requireLogin} = require("../../middleware/auth.middleware");
-const {follow, ApiProfileFollowing, ApiProfileFollowers, ApiProfilePicture} = require("../../controllers/api/users.controllers");
+const {follow, ApiProfileFollowing, ApiProfileFollowers, ApiProfilePicture, ApiCoverPicture} = require("../../controllers/api/users.controllers");
 
 router.use(requireLogin);
 
@@ -18,5 +18,8 @@ router.route('/:id/followers')
 
 router.route('/profilePicture')
     .post(ApiProfilePicture)
+
+router.route('/profileCoverImage')
+    .post(ApiCoverPicture)
 
 module.exports = router;

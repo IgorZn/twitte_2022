@@ -66,7 +66,7 @@ mixin createImageUploadModal()
         .modal-dialog.modal-dialog-centered(role='document')
             .modal-content
                 .modal-header
-                    h5#imageUploadModalLongTitle.modal-title Upload a new picture?
+                    h5#imageUploadModalLongTitle.modal-title Upload a new avatar picture?
                     button.close(type='button', data-dismiss='modal', aria-label='Close')
                         span(aria-hidden='true') &times;
                 .modal-body
@@ -78,3 +78,22 @@ mixin createImageUploadModal()
                 .modal-footer
                     button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
                     button#imageUploadButton.btn.btn-primary(type='button') Save
+
+mixin createCoverImageUploadModal()
+    // Modal
+    #coverUploadModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='coverUploadModalTitle', aria-hidden='true')
+        .modal-dialog.modal-dialog-centered(role='document')
+            .modal-content
+                .modal-header
+                    h5#coverUploadModalTitle.modal-title Upload a new cover picture?
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    #originalPostContainer
+                    .postFormContainer
+                        input#fileCoverPhoto(type="file" name="fileCoverPhoto")
+                    .imagePreviewContainer
+                        img#imageCoverPreview
+                .modal-footer
+                    button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
+                    button#coverUploadModal.btn.btn-primary(type='button') Save

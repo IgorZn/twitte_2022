@@ -2,7 +2,7 @@
 let cropper
 
 
-// ------- On Event
+// -- On Event
 
 $("#postTextarea, #replayTextarea").keyup(event => {
     let textbox = $(event.target);
@@ -84,7 +84,7 @@ $("#replayModal").on("hidden.bs.modal", (event) => {
 })
 
 
-// ------- Document
+// -- Document
 
 $(document).on("click", ".likeButton", (event) => {
     let button = $(event.target);
@@ -199,8 +199,50 @@ document
     })
 
 document
+    .getElementById("fileCoverPhoto")
+    .addEventListener('change', (event) => {
+        const reader = new FileReader();
+        const input = $(event.target)[0];
+        reader.onload = (e) => {
+            const image = document.getElementById("imageCoverPreview")
+            image.src = e.target.result
+
+            if (cropper) {
+                cropper.destroy()
+            }
+
+            cropper = new Cropper(image, {
+                aspectRatio: 16 / 9,
+                background: false,
+            });
+
+        }
+
+        reader.readAsDataURL(...input.files)
+
+    })
+
+document
     .getElementById("imageUploadButton")
-    .onclick = () => {
+    .onclick = (event) => {
+        uploadImage(event)
+}
+
+document
+    .getElementById("coverUploadModal")
+    .onclick = (event) => {
+        uploadImage(event)
+}
+
+// -- Function
+
+function uploadImage(event) {
+    const URLS = {
+        imageUploadButton: "/api/v1/users/profilePicture",
+        coverUploadModal: "/api/v1/users/profileCoverImage"
+    }
+    const key = event.target.getAttribute("id")
+
     const canvas = cropper.getCroppedCanvas()
     if (!canvas) {
         alert('Could not upload image')
@@ -216,18 +258,15 @@ document
             body: formData
         }
 
-        fetch("/api/v1/users/profilePicture", options)
+        fetch(URLS[key], options)
             .then(res => {
-                if(res.ok){
+                if (res.ok) {
                     location.reload()
                 }
-                    console.log(res)
+                console.log(res)
             })
-
     })
 }
-
-// ------- Function
 
 function getPostIdFromElement(element) {
     const isRoot = element.hasClass("post");

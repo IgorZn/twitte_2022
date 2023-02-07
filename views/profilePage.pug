@@ -18,11 +18,16 @@ block content
 
 
         .profileHeaderContainer
-            .coverPhotoContainer
+            .coverPhotoSection
+                .coverPhotoContainer
+                    if user._id == userId
+                        if user.coverPic
+                            img(src=user.coverPic, alt="User's cover image")
+                        button.coverPhotoButton(data-toggle="modal" data-target="#coverUploadModal")
+                            i.fas.fa-camera
+
                 .userImageContainer
                     img(src=user.profilePic, alt="User profile image")
-
-
                     if user._id == userId
                         button.profilePictureButton(data-toggle="modal" data-target="#imageUploadModal")
                             i.fas.fa-camera
@@ -53,6 +58,7 @@ block content
 
         +createPostModals(user)
         +createImageUploadModal()
+        +createCoverImageUploadModal()
 
 block scripts
     script(src='/js/profile.js')

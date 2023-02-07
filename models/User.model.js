@@ -32,6 +32,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "/images/profilePic.jpeg"
     },
+    coverPic: {
+        type: String,
+    },
     likes: [{type: 'ObjectId', ref: 'Post'}], // ПОСТЫ, понравившиеся  ПОЛЬЗОВАТЕЛЮ
     retweets: [{type: 'ObjectId', ref: 'Post'}], // ПОСТЫ, которые ретвитнули
     following: [{type: 'ObjectId', ref: 'User'}],
