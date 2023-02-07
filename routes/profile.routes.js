@@ -18,7 +18,7 @@ router.route('/:username')
 router.route('/:username/replies')
     .get(requireLogin, profileReplies);
 
-// Fg and Fs
+/* Fg and Fs */
 router.route('/:id/following')
     .get(requireLogin, profileFollowing);
 

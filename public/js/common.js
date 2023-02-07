@@ -221,6 +221,7 @@ document
                 if(res.ok){
                     location.reload()
                 }
+                    console.log(res)
             })
 
     })

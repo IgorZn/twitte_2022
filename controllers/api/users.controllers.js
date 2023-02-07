@@ -1,5 +1,7 @@
 const User = require('../../models/User.model')
 const mongoose = require("mongoose");
+const ErrResponse = require('../../utils/errorResponse')
+const path = require("node:path");
 
 // @desc        Retweet post
 // @route       POST /api/v1/users/:id/follow
@@ -7,7 +9,7 @@ const mongoose = require("mongoose");
 exports.follow = async (req, res, next) => {
     const userID = req.params.id
     const sessionUserId = req.session.user._id
-    console.log('userID, sessionUserId >>>',userID, sessionUserId)
+    console.log('userID, sessionUserId >>>', userID, sessionUserId)
 
     await User.findById(userID)
         .exec()
@@ -110,5 +112,47 @@ exports.ApiProfileFollowers = async (req, res, next) => {
 // @route       POST /api/v1/users/profilePicture
 // @access      Private
 exports.ApiProfilePicture = async (req, res, next) => {
-    console.log('ApiProfilePicture', req.files); // the uploaded file object
+    let file, ext, uploadPath;
+
+    file = req.files.croppedImage;
+
+    if (!req.files || Object.keys(req.files).length === 0) {
+        next(new ErrResponse('No FILES were uploaded.', 404));
+    }
+
+    // Check that is an image
+    if (!file.mimetype.startsWith('image')) {
+        next(new ErrResponse('Wrong IMAGE format.', 404));
+    }
+
+    ext = file.mimetype.split('/')[1]
+
+    file.name = `photo_${req.session.user.username}_${Date.now()}.${ext}`
+    uploadPath = path.join('.', process.env.FILE_UPLOAD_PATH, file.name)
+
+    // console.log(req.session)
+
+    await file.mv(uploadPath, async function (err) {
+        if (err)
+            console.log(err)
+        return new ErrResponse(err, 404);
+
+        console.log('User photo was update...'.green.bgCyan)
+    })
+
+    const picPath = `/uploads/${file.name}`
+    await User.findByIdAndUpdate(req.session.user._id, {profilePic: picPath}, {new: true})
+        .exec()
+        .then(result => {
+            // Update user session data
+            req.session.user = result
+
+            // Send response
+            res
+                .status(200)
+                .json({success: true, data: file.name});
+        })
+        .catch(err => new ErrResponse(err, 404))
+
+    // console.log('ApiProfilePicture', req.files); // the uploaded file object
 };
