@@ -67,6 +67,12 @@ $("#deletePostModal").on("show.bs.modal", (event) => {
     $("#deletePostButton").data("id", postId);
 })
 
+$("#confirmPinModal").on("show.bs.modal", (event) => {
+    let button = $(event.relatedTarget);
+    let postId = getPostIdFromElement(button);
+    $("#pinPostButton").data("id", postId);
+})
+
 $("#deletePostButton").click((event) => {
     const postID = $(event.target).data("id")
     $.ajax({
@@ -75,6 +81,20 @@ $("#deletePostButton").click((event) => {
         success: (data, status, xhr) => {
             location.reload()
             console.log(data)
+        }
+    })
+})
+
+$("#pinPostButton").click((event) => {
+    const postID = $(event.target).data("id")
+    $.ajax({
+        url: `/api/v1/posts/${postID}`,
+        type: "PUT",
+        data: {pinned: true},
+        success: (data, status, xhr) => {
+            console.log(data.data)
+            setTimeout(() => location.reload(), 200)
+
         }
     })
 })
@@ -268,6 +288,7 @@ function uploadImage(event) {
     })
 }
 
+
 function getPostIdFromElement(element) {
     const isRoot = element.hasClass("post");
     const rootElement = isRoot == true ? element : element.closest(".post");
@@ -329,7 +350,9 @@ function createPostHTML(postData, largeFont = false) {
 
     let buttons = "";
     if (postData.postedBy._id == userLoggedJs._id) {
-        buttons = `<button data-id="${postData._id}" data-toggle="modal" data-target="#deletePostModal">
+        buttons = `<button data-id="${postData._id}" data-toggle="modal" data-target="#confirmPinModal">
+                    <i class="fas fa-light fa-thumbtack"></i></button>
+                <button data-id="${postData._id}" data-toggle="modal" data-target="#deletePostModal">
                     <i class='fas fa-times'></i></button>`;
     }
 

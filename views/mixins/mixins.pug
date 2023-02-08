@@ -49,6 +49,7 @@ mixin creayedeletePostModal()
 mixin createPostModals(userLoggedJs)
     +createReplyModal(userLoggedJs)
     +creayedeletePostModal()
+    +createPinnedPostModal()
 
 mixin createFollowButton(user, isFollowing)
     - text = isFollowing ? "Following" : "Follow"
@@ -97,3 +98,18 @@ mixin createCoverImageUploadModal()
                 .modal-footer
                     button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
                     button#coverUploadModal.btn.btn-primary(type='button') Save
+
+mixin createPinnedPostModal()
+    // Modal
+    #confirmPinModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='confirmPinModalTitle', aria-hidden='true')
+        .modal-dialog.modal-dialog-centered(role='document')
+            .modal-content
+                .modal-header
+                    h5#confirmPinModalTitle.modal-title Pin this post?
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    p This post will appear at the top of your profile. Only one post.
+                .modal-footer
+                    button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
+                    button#pinPostButton.btn.btn-primary(type='button') Pin

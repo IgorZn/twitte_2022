@@ -158,6 +158,33 @@ exports.deletePost = async (req, res, next) => {
 };
 
 
+// @desc        Pin post
+// @route       PUT /api/v1/:id
+// @access      Private
+exports.pinPost = async (req, res, next) => {
+    const userID = req.session.user._id
+
+    if (req.body.pinned) {
+        await Post.updateMany({postedBy: userID}, {pinned: false})
+            .catch(error => {
+                console.log(error);
+                res.sendStatus(400);
+            })
+    }
+
+    await Post.findByIdAndUpdate(req.params.id, req.body)
+        .then((data) =>
+            res
+                .status(202)
+                .json({success: true, data})
+        )
+        .catch(error => {
+            console.log(error);
+            res.sendStatus(400);
+        })
+};
+
+
 // @desc        Retweet post
 // @route       POST /api/v1/:id/retweet
 // @access      Private
