@@ -1,12 +1,12 @@
 extends layouts/main-layout
 
 block content
-  script.
-      var postId = '!{postId}'
+    script.
+        var postId = '!{postId}'
 
-  .postContainer
+    .postContainer
 
-  +createPostModals(user)
+    +createPostModals(user)
 
 block scripts
-  script(src='/js/postPage.js')
+    script(src='/js/postPage.js')

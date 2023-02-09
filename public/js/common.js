@@ -73,6 +73,12 @@ $("#confirmPinModal").on("show.bs.modal", (event) => {
     $("#pinPostButton").data("id", postId);
 })
 
+$("#unpinModal").on("show.bs.modal", (event) => {
+    let button = $(event.relatedTarget);
+    let postId = getPostIdFromElement(button);
+    $("#unPinPostButton").data("id", postId);
+})
+
 $("#deletePostButton").click((event) => {
     const postID = $(event.target).data("id")
     $.ajax({
@@ -91,6 +97,20 @@ $("#pinPostButton").click((event) => {
         url: `/api/v1/posts/${postID}`,
         type: "PUT",
         data: {pinned: true},
+        success: (data, status, xhr) => {
+            console.log(data.data)
+            setTimeout(() => location.reload(), 200)
+
+        }
+    })
+})
+
+$("#unPinPostButton").click((event) => {
+    const postID = $(event.target).data("id")
+    $.ajax({
+        url: `/api/v1/posts/${postID}`,
+        type: "PUT",
+        data: {pinned: false},
         success: (data, status, xhr) => {
             console.log(data.data)
             setTimeout(() => location.reload(), 200)
@@ -245,13 +265,13 @@ document
 document
     .getElementById("imageUploadButton")
     .onclick = (event) => {
-        uploadImage(event)
+    uploadImage(event)
 }
 
 document
     .getElementById("coverUploadModal")
     .onclick = (event) => {
-        uploadImage(event)
+    uploadImage(event)
 }
 
 // -- Function
@@ -349,8 +369,17 @@ function createPostHTML(postData, largeFont = false) {
     const largeFontClass = largeFont ? "largeFont" : "";
 
     let buttons = "";
+    let pinnedPostText = "";
     if (postData.postedBy._id == userLoggedJs._id) {
-        buttons = `<button data-id="${postData._id}" data-toggle="modal" data-target="#confirmPinModal">
+        let pinnedClass = "";
+        let dataTarget = "#confirmPinModal";
+        if (postData.pinned === true) {
+            pinnedClass = "active";
+            dataTarget = "#unpinModal";
+            pinnedPostText = "<i class='fas fa-thumbtack'></i><span>Pinned post</span>"
+        }
+
+        buttons = `<button class="pinButton ${pinnedClass}" data-id="${postData._id}" data-toggle="modal" data-target="${dataTarget}">
                     <i class="fas fa-light fa-thumbtack"></i></button>
                 <button data-id="${postData._id}" data-toggle="modal" data-target="#deletePostModal">
                     <i class='fas fa-times'></i></button>`;
@@ -365,6 +394,7 @@ function createPostHTML(postData, largeFont = false) {
                         <img src='${postedBy.profilePic}'>
                     </div>
                     <div class='postContentContainer'>
+                    <div class="pinnedPostText">${pinnedPostText}</div>
                         <div class='header'>
                             <a href='/profile/${postedBy.username}'>${displayName}</a>
                             <span class='username'>@${postedBy.username}</span>
@@ -437,8 +467,10 @@ function outputPosts(results, container) {
     }
 
     results.forEach(result => {
-        const html = createPostHTML(result)
-        container.append(html);
+        if (!result.pinned) {
+            const html = createPostHTML(result)
+            container.append(html);
+        }
     });
 
     if (results.length == 0) {

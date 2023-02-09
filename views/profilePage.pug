@@ -54,6 +54,8 @@ block content
         .tabsContainer
             +createTab("Posts", `/profile/${user.username}`, selectedTab != "replies")
             +createTab("Replies", `/profile/${user.username}/replies`, selectedTab == "replies")
+
+        .pinnedPostContainer
         .postContainer
 
         +createPostModals(user)

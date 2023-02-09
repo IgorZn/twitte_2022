@@ -50,6 +50,7 @@ mixin createPostModals(userLoggedJs)
     +createReplyModal(userLoggedJs)
     +creayedeletePostModal()
     +createPinnedPostModal()
+    +unPinPostModal()
 
 mixin createFollowButton(user, isFollowing)
     - text = isFollowing ? "Following" : "Follow"
@@ -113,3 +114,18 @@ mixin createPinnedPostModal()
                 .modal-footer
                     button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
                     button#pinPostButton.btn.btn-primary(type='button') Pin
+
+mixin unPinPostModal()
+    // Modal
+    #unpinModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='unpinModalTitle', aria-hidden='true')
+        .modal-dialog.modal-dialog-centered(role='document')
+            .modal-content
+                .modal-header
+                    h5#unpinModalTitle.modal-title Un pin this post?
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    p This post will be unpinned.
+                .modal-footer
+                    button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
+                    button#unPinPostButton.btn.btn-primary(type='button') Yes

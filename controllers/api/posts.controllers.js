@@ -161,7 +161,7 @@ exports.deletePost = async (req, res, next) => {
 // @desc        Pin post
 // @route       PUT /api/v1/:id
 // @access      Private
-exports.pinPost = async (req, res, next) => {
+exports.pinUnpinPost = async (req, res, next) => {
     const userID = req.session.user._id
 
     if (req.body.pinned) {
