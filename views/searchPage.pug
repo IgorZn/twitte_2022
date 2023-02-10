@@ -1,0 +1,18 @@
+extends layouts/main-layout
+
+block content
+    p #{user.username}
+
+    .searchBarContainer
+        i.fas.fa-search(aria-hidden='true')
+        input#searchBox(type="text", name="searchBox", data-search=selectedTab, placeholder="Search for users or posts")
+
+    .tabsContainer
+        +createTab("Posts", `/search/posts`, selectedTab != "users")
+        +createTab("Replies", `/search/users`, selectedTab == "users")
+
+    .resultsContainer
+    +createPostModals(user)
+
+block scripts
+    script(src='/js/search.js')
