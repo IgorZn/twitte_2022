@@ -244,14 +244,14 @@ exports.retweetPost = async (req, res, next) => {
 // @route       GET /api/v1/posts
 // @access      Private
 exports.getPosts = async (req, res, next) => {
-    console.log(req.query)
+    console.log('getPosts>>>',req.query)
     if (!req.session.user) {
         res
             .status(404)
             .redirect('/login')
-    }
+    };
 
-    const searchObj = req.query
+    const searchObj = req.query;
 
 
     if (searchObj.isReply) {
@@ -265,7 +265,13 @@ exports.getPosts = async (req, res, next) => {
          */
         searchObj.replyTo = {$exists: isReply}
         delete searchObj.isReply
-    }
+    };
+
+    if (searchObj.search) {
+        console.log('if searchObj.search>>',searchObj.search)
+        searchObj.content = { $regex: searchObj.search, $options: "i"}
+        delete searchObj.search
+    };
 
     if (searchObj.followingOnly) {
         const followingOnly = searchObj.followingOnly == 'true'
@@ -279,10 +285,10 @@ exports.getPosts = async (req, res, next) => {
 
         delete searchObj.followingOnly
 
-    }
+    };
 
 
-    console.log('searchObj>>>', searchObj)
+    console.log('searchObj>>>', searchObj);
 
     return await Post.find(searchObj)
         .populate({
@@ -294,6 +300,7 @@ exports.getPosts = async (req, res, next) => {
         .sort('field -createdAt') // по возрастания, а без "-" по убыванию
         .exec()
         .then(async data => {
+            console.log('Post.find>>', data)
             // To make retweet post display normally as regular post with first and second name and so on...
             data = await User.populate(data, {path: 'replyTo.postedBy'})
             data = await User.populate(data, {path: 'retweetData.postedBy'})

@@ -9,7 +9,7 @@ block content
 
     .tabsContainer
         +createTab("Posts", `/search/posts`, selectedTab != "users")
-        +createTab("Replies", `/search/users`, selectedTab == "users")
+        +createTab("Users", `/search/users`, selectedTab == "users")
 
     .resultsContainer
     +createPostModals(user)
