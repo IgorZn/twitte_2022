@@ -509,3 +509,49 @@ function outPutWithReplies(results, container) {
     }
 
 }
+
+
+function outputUser(results, container) {
+    container.html("")
+    if (results.length) {
+        results.forEach(result => {
+            const html = createUserHtml(result, true)
+            container.append(html)
+            // console.log(result.firstName)
+        })
+    } else {
+        container.append("<span class='noResults'>No results found</span>")
+    }
+
+}
+
+
+function createUserHtml(userData, showFollowButton) {
+    const name = userData.firstName + " " + userData.lastName;
+
+    let followButton = "";
+    let isFollowing = userLoggedJs.following && userLoggedJs.following.includes(userData._id);
+    let text = isFollowing ? "Following" : "Follow"
+    let buttonClass = isFollowing ? "followButton following" : "followButton"
+
+
+    if (showFollowButton && userLoggedJs._id != id) {
+        followButton = `<div class='followButtonContainer'>
+                            <button class='${buttonClass}' data-user='${id}'>${text}</button>
+                        </div>`;
+    }
+
+
+    return `<div class='user'>
+                <div class='userImageContainer'>
+                    <img src='${userData.profilePic}'>
+                </div>
+                <div class='userDetailsContainer'>
+                    <div class='header'>
+                        <a href='/profile/${userData.username}'>${name}</a>
+                        <span class='username'>@${userData.username}</span>
+                    </div>
+                </div>
+                ${followButton}
+            </div>`;
+}

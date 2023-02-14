@@ -81,6 +81,34 @@ exports.ApiProfileFollowing = async (req, res, next) => {
 };
 
 
+// @desc        Search results on search page for user tab
+// @route       GET /
+// @access      Private
+exports.searchUserTab = async (req, res, next) => {
+    let searchObj = req.query
+
+    if (req.query.search) {
+        searchObj = {
+            $or: [
+                {firstName: {$regex: searchObj.search, $options: "i"}},
+                {lastName: {$regex: searchObj.search, $options: "i"}},
+                {userName: {$regex: searchObj.search, $options: "i"}},
+            ]
+        }
+    }
+
+    return await User.find(searchObj)
+        .exec()
+        .then(data => {
+            return res
+                .status(200)
+                .json({success: true, data, count: data.length})
+        })
+        .catch(err => next(new ErrResponse(err, 404)))
+
+};
+
+
 // @desc        Profile page
 // @route       GET /:id/followers
 // @access      Public

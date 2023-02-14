@@ -65,5 +65,11 @@ function makeSearch(searchTerm, searchType) {
         })
         .then(data => {
             console.log(data)
+            // show search results
+            if(searchType.includes("users")){
+                outputUser(data.data, $(".resultsContainer"))
+            } else {
+                outputPosts(data.data, $(".resultsContainer"))
+            }
         })
 }

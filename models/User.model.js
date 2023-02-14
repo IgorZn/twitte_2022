@@ -79,7 +79,7 @@ UserSchema.static({
                         user: user,
                         userLoggedJs: JSON.stringify(userLoggedIn),
                         profileUser: user,
-                        isLoggedInUserFollower: isFollowing(user, JSON.stringify(userLoggedIn)),
+                        isLoggedInUserFollower: isFollowing(user, userLoggedIn),
                         status: true
                     }
                 })

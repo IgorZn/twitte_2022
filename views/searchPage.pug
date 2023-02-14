@@ -1,6 +1,9 @@
 extends layouts/main-layout
 
 block content
+    script.
+        var id = '!{id}'
+
     p #{user.username}
 
     .searchBarContainer
