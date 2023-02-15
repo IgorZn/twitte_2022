@@ -1,0 +1,12 @@
+extends layouts/main-layout
+
+block content
+    p Welcome to #{title}
+    p #{user.username}
+    .chatPageContainer
+        .chatTitleBar
+            label(for="userSearchTextBox") To:
+            #selectedUsers
+                input#userSearchTextBox(type="text", placeholder="Type the name of the person")
+        .resultsContainer
+        button#createChatyButton(disabled) Create chat
