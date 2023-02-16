@@ -1,5 +1,6 @@
 // Globals
 let cropper
+let timer, value;
 
 
 // -- On Event
@@ -214,65 +215,7 @@ $(document).on("click", ".followButton", (event) => {
 
 
 // -- JS
-document
-    .getElementById("filePhoto")
-    .addEventListener('change', (event) => {
-        const reader = new FileReader();
-        const input = $(event.target)[0];
-        reader.onload = (e) => {
-            const image = document.getElementById("imagePreview")
-            image.src = e.target.result
 
-            if (cropper) {
-                cropper.destroy()
-            }
-
-            cropper = new Cropper(image, {
-                aspectRatio: 1 / 1,
-                background: false,
-            });
-
-        }
-
-        reader.readAsDataURL(...input.files)
-
-    })
-
-document
-    .getElementById("fileCoverPhoto")
-    .addEventListener('change', (event) => {
-        const reader = new FileReader();
-        const input = $(event.target)[0];
-        reader.onload = (e) => {
-            const image = document.getElementById("imageCoverPreview")
-            image.src = e.target.result
-
-            if (cropper) {
-                cropper.destroy()
-            }
-
-            cropper = new Cropper(image, {
-                aspectRatio: 16 / 9,
-                background: false,
-            });
-
-        }
-
-        reader.readAsDataURL(...input.files)
-
-    })
-
-document
-    .getElementById("imageUploadButton")
-    .onclick = (event) => {
-    uploadImage(event)
-}
-
-document
-    .getElementById("coverUploadModal")
-    .onclick = (event) => {
-    uploadImage(event)
-}
 
 // -- Function
 
@@ -554,4 +497,47 @@ function createUserHtml(userData, showFollowButton) {
                 </div>
                 ${followButton}
             </div>`;
+}
+
+
+function makeSearchUsers(searchTerm) {
+    let url = "/api/v1/users?";
+
+    const options = {
+        method: 'GET',
+    }
+    // https://stackoverflow.com/a/58437909/6671330
+
+    fetch(url + new URLSearchParams({search: searchTerm}), options)
+        .then(res => {
+            // this 'res.json()' will go the next 'then' below as a result (data)
+            return res.json()
+                .then(json => {
+                    return json
+                })
+        })
+        .then(data => {
+            console.log(data)
+            // show search results
+            outputSelectableUsers(data.data, $(".resultsContainer"))
+
+        })
+}
+
+function outputSelectableUsers(results, container) {
+    container.html("")
+    if (results.length > 0) {
+        results.forEach(result => {
+            // skip in output himself
+            if(result._id == userLoggedJs._id){
+                return;
+            }
+
+            const html = createUserHtml(result, true)
+            container.append(html)
+            // console.log(result.firstName)
+        })
+    } else {
+        container.append("<span class='noResults'>No results found</span>")
+    }
 }

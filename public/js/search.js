@@ -1,4 +1,3 @@
-let timer, value;
 
 // $("#searchBox").on("keydown", (event) => {
 //     clearTimeout(timer);

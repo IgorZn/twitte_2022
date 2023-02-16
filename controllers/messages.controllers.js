@@ -23,6 +23,7 @@ exports.newMessagesPage = async (req, res, next) => {
         status: true,
         title: 'New messages',
         user: req.session.user,
+        id: req.session.user._id.toString(),
         userLoggedJs: JSON.stringify(req.session.user),
     }
 
