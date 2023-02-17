@@ -1,6 +1,7 @@
 // Globals
 let cropper
 let timer, value;
+let selectedUsers = [];
 
 
 // -- On Event
@@ -524,6 +525,7 @@ function makeSearchUsers(searchTerm) {
         })
 }
 
+
 function outputSelectableUsers(results, container) {
     container.html("")
     if (results.length > 0) {
@@ -534,10 +536,21 @@ function outputSelectableUsers(results, container) {
             }
 
             const html = createUserHtml(result, true)
-            container.append(html)
+            const element = $(html);
+            element.click(() => userSelected(result))
+
+            container.append(element)
             // console.log(result.firstName)
         })
     } else {
         container.append("<span class='noResults'>No results found</span>")
     }
+}
+
+
+function userSelected(user) {
+    selectedUsers.push(user)
+    $("#userSearchTextBox").val("").focus();
+    $(".resultsContainer").html("");
+    $("#createChatButton").prop("disabled", false)
 }

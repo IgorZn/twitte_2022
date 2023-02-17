@@ -86,18 +86,23 @@ exports.ApiProfileFollowing = async (req, res, next) => {
 // @access      Private
 exports.searchUserTab = async (req, res, next) => {
     let searchObj = req.query
+    let searchObjQuery
+    console.log('searchObj>>>', searchObj)
+    console.log('searchObj.search>>>', searchObj.search)
 
-    if (req.query.search) {
-        searchObj = {
+    if (req.query.search.length > 0) {
+        searchObjQuery = {
             $or: [
-                {firstName: {$regex: searchObj.search, $options: "i"}},
-                {lastName: {$regex: searchObj.search, $options: "i"}},
-                {userName: {$regex: searchObj.search, $options: "i"}},
+                {firstName: {$regex: req.query.search, $options: "i"}},
+                {lastName: {$regex: req.query.search, $options: "i"}},
+                {userName: {$regex: req.query.search, $options: "i"}},
             ]
         }
     }
 
-    return await User.find(searchObj)
+
+    console.log('searchUserTab__searchObjQuery>>>', searchObjQuery['or'])
+    return await User.find(searchObjQuery)
         .exec()
         .then(data => {
             return res
