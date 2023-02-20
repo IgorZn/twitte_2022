@@ -531,7 +531,14 @@ function outputSelectableUsers(results, container) {
     if (results.length > 0) {
         results.forEach(result => {
             // skip in output himself
-            if(result._id == userLoggedJs._id){
+            if(result._id == userLoggedJs._id || selectedUsers.some(u => u._id == result._id)){
+                /*
+                *  if user (result) already exist in an array and
+                *  check that selectedUsers don't contain current user (result)
+                *
+                *  короче, эта штука просто фильтрует вывод на странице, чтобы там
+                *  не было, того кого уже добавили в selectedUsers
+                * */
                 return;
             }
 
