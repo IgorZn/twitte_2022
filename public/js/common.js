@@ -125,6 +125,24 @@ $("#replayModal").on("hidden.bs.modal", (event) => {
     $("#originalPostContainer").html("")
 })
 
+$("#createChatButton").click((event) => {
+    const usersData = JSON.stringify(selectedUsers);
+
+    $.ajax({
+        url: `/api/v1/chats`,
+        type: "POST",
+        data: {users: usersData},
+        success: (chat, status, xhr) => {
+            console.log(chat.data)
+            setTimeout(() => {
+                if(!chat.data || chat.data._id) return alert('Invalid response from server.')
+                // chat._id -- will be instance if Chat schema
+                location.href = `/messages/${chat.data._id}`
+            }, 200)
+
+        }
+    })
+})
 
 // -- Document
 
