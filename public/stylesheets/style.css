@@ -487,7 +487,8 @@ button span {
 }
 
 .chatTitleBar label {
-    margin-right: 10px;
+    /*margin-right: 10px;*/
+    margin: 0 10px 0 0;
 }
 
 #userSearchTextBox {
@@ -511,4 +512,13 @@ button span {
     color: var(--greyText);
 }
 
-/* 182 */
+/* 187 */
+.selectedUser {
+    font-weight: 300;
+    background-color: #CBE5FE;
+    color: #0084ff;
+    padding: 5px;
+    border-radius: 3px;
+    margin: 5px 5px 0 0;
+    display: inline-block;
+}
