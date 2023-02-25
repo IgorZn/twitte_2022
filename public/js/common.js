@@ -132,8 +132,8 @@ $("#createChatButton").click((event) => {
         url: '/api/v1/chats',
         type: "POST",
         data: {users: usersData},
-        success: (data, status) => {
-            console.log(data.data, status)
+        success: (data, status, xhr) => {
+            setTimeout(() => console.log(data.data, status, xhr.status), 500)
             location.href = `/messages/${data.data._id}`
 
         }
