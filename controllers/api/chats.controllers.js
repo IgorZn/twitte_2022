@@ -1,4 +1,5 @@
 const Chat = require("../../models/Chat.model");
+const User = require("../../models/User.model");
 const ErrResponse = require("../../utils/errorResponse");
 
 
@@ -59,13 +60,22 @@ exports.startChatRoom = async (req, res, next) => {
     * */
 
     await Chat.find({ users: { $elemMatch: { $eq: req.session.user._id}}})
+        .populate("users")
         .exec()
         .then( data => {
+            // Add fullname
+            data.forEach(chatUsersObj => {
+                chatUsersObj.users.forEach(user => {
+                    user.fullName = User.getFullUserName(user)
+                })
+            })
+
             res
                 .status(200)
                 .json({success: true, data})
         })
         .catch(err => {
+            console.log(err)
             next(new ErrResponse(err, 404))
         })
 };

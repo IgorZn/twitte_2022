@@ -12,6 +12,9 @@ const UserSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    fullName: {
+        type: String
+    },
     username: {
         type: String, required: true,
         trim: true,
@@ -107,6 +110,9 @@ UserSchema.static({
                 })
         }
 
+    },
+    getFullUserName(userObj) {
+        return `${userObj.firstName} ${userObj.lastName}`
     }
 })
 

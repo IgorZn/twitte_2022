@@ -20,4 +20,46 @@ $(document).ready(() => {
 
 function outputChatList(chatList, container) {
     console.log(chatList)
+    chatList.forEach(chat => {
+        const html = createChatHtml(chat)
+        container.append(html)
+    })
+
+    if(!chatList.length) {
+        container.append("<span class='noResults'>Nothing to show.</span>")
+    }
+};
+
+
+function createChatHtml(chatData) {
+    const chatName = getChatName(chatData); // TODO
+    const image = ""; // TODO
+    const latestMessage = "This is the latest message";
+
+    return `<a href='/messages/${chatData._id}' class='resultListItem'>
+                <div class='resultsDetailsContainer'>
+                    <span class='heading'>${chatName}</span>
+                    <span class='subText'>${latestMessage}</span>
+                </div>
+            </a>`;
+};
+
+
+function getChatName(chatData) {
+    let chatName = chatData.chatName
+
+    if(!chatName){
+        const otherChatUsers = getOtherChatUsers(chatData.users);
+        const namesArrray = otherChatUsers.map( user => `${user.fullName}`)
+        chatName = namesArrray.join(', ')
+    }
+
+    return chatName
+
+}
+
+
+function getOtherChatUsers(users) {
+    if(users.length == 1) return users
+    return users.filter(user => user._id != userLoggedJs._id)
 }
