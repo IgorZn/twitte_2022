@@ -1,0 +1,17 @@
+extends layouts/main-layout
+
+block content
+    if status
+        script.
+            var chatId = '!{chat._id}'
+            var status = '!{chat._id}'
+
+        p Welcome to #{title}
+        p #{user.username}
+        p #{chat.users}
+
+    else
+        p No such chat
+
+block scripts
+    script(src='/js/chatPage.js')

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 /* Controllers */
-const {inboxPage, newMessagesPage} = require("../controllers/messages.controllers");
+const {inboxPage, newMessagesPage, chatPage} = require("../controllers/messages.controllers");
 
 /* Middleware */
 const {requireLogin} = require("../middleware/auth.middleware");
@@ -14,6 +14,9 @@ router.route('/')
 
 router.route('/new')
     .get(newMessagesPage)
+
+router.route('/:chatId')
+    .get(chatPage)
 
 
 module.exports = router;

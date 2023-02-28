@@ -24,4 +24,10 @@ const ChatSchema = new mongoose.Schema({
     timestamps: true
 });
 
+ChatSchema.static({
+    checkId: async function (id) {
+        return mongoose.isValidObjectId(id)
+    }
+})
+
 module.exports = mongoose.model('Chat', ChatSchema);

@@ -78,10 +78,11 @@ function getChatImageElements(chatData) {
         // simple add another image to 'chatImage'
         chatImage += getUserChatImageElement(otherChatUsers[1])
     }
-    console.log(chatImage)
+    // console.log(chatImage)
     return `<div class='resultsImageContainer ${groupChatClass}'>${chatImage}</div>`;
 
 }
+
 
 function getUserChatImageElement(user){
     if(!user || !user.profilePic){
