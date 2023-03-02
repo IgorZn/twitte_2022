@@ -33,7 +33,7 @@ block content
                             i.fas.fa-camera
 
             .profileButtonsContainer
-                if user._id != userLoggedJs._id
+                if user._id != userId
                     a.profileButton(href=`/messages/${user._id}`)
                         i.fas.fa-envelope
                     +createFollowButton(user, isLoggedInUserFollower)

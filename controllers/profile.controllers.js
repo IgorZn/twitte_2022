@@ -11,6 +11,7 @@ exports.profile = async (req, res, next) => {
     const payload = await User.getPayload(username, user)
     // console.log('Profile page>>>',user)
     payload.userId = userId
+    payload.userLoggedJs = JSON.stringify(req.session.user),
     res.render('profilePage', payload);
 };
 

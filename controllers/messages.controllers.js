@@ -1,4 +1,5 @@
 const Chat = require("../models/Chat.model");
+const User = require('../models/User.model')
 
 // @desc        Messages page
 // @route       GET /
@@ -51,29 +52,50 @@ exports.chatPage = async (req, res, next) => {
     }
 
     if (!chatId) {
+        // Something wrong with 'chatId'
         payload.status = false
         return res
             .status(200)
             .render('chatPage', payload);
     }
 
+    // Now make sure that chatId is exist in DB
+    // find 'chatId' and current 'userId' in that chat
+    // to avoid access by direct link on another chat
     await Chat.findOne({_id: chatId, users: {$elemMatch: {$eq: userId}}})
         .populate("users")
         .exec()
-        .then(data => {
+        .then(async data => {
             if (data) {
-                payload.chat = data
-                res
-                    .status(200)
-                    .render('chatPage', payload);
-            } else {
-                payload.status = false
                 res
                     .status(200)
                     .render('chatPage', payload);
             }
 
+            if (!data) {
+                /*
+                *   chatId -- это 'userId' на кнопке в профиле пользователя,
+                *   в данном случае
+                * */
+
+                // check that 'userId' aka 'chatId' is exist
+                // chatId === userId
+                await User.findById(chatId)
+                    .exec()
+                    .then(async user => {
+                        if (user) {
+                            payload.chat = await Chat.getChatByUserId(userId, chatId)
+                            return res
+                                .status(200)
+                                .render('chatPage', payload);
+                        } else {
+                            // no userId no chat :)
+                            payload.status = false
+                            res
+                                .status(200)
+                                .render('chatPage', payload);
+                        }
+                    })
+            }
         })
-
-
 };
