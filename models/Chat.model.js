@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 const ChatSchema = new mongoose.Schema({
     chatName: {
@@ -73,8 +74,8 @@ ChatSchema.static({
 
                 $size: 2,
                 $all: [
-                    {$elemMatch: {$eq: currentUserId}},
-                    {$elemMatch: {$eq: otherUserId}},
+                    {$elemMatch: {$eq: new ObjectId(currentUserId)}},
+                    {$elemMatch: {$eq: new ObjectId(otherUserId)}},
                 ]
             }
         }, {

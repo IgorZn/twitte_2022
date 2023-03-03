@@ -6,9 +6,23 @@ block content
             var chatId = '!{chat._id}'
             var status = '!{chat._id}'
 
-        p Welcome to #{title}
-        p #{user.username}
-        p #{chat.users}
+        .alert.alert-secondary(role="alert")
+            p Welcome to #{title}
+            p user.username -- #{user.username}
+            p user._id -- #{user._id}
+            p chatId -- #{chat._id}
+
+        .chatPageContainer
+            .chatTitleBarContainer
+                span#chatName This is the chat
+
+            .mainContentContainer
+                .chatContainer
+                    .chatMessages
+                    .footer
+                        textarea(name="messageInput", placeholder="Type a message...")
+                        button.sendMessageButton
+                            i.fas.fa-paper-plane
 
     else
         p No such chat
