@@ -668,3 +668,40 @@ button span {
     overflow-y: auto;
     padding: var(--spacing);
 }
+
+/* 209 - 213 */
+
+.chatImagesContainer {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 100%;
+    margin-right: 10px;
+}
+
+.chatImagesContainer img {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+}
+
+.chatImagesContainer .userCount {
+    height: 40px;
+    width: 40px;
+    background-color: #f1f1f1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border: 2px solid #fff;
+}
+
+.chatImagesContainer img:not(:last-child),
+.chatImagesContainer .userCount {
+    margin-left: -10px;
+}
+
+#chatNameTextbox {
+    width: 100%;
+}
