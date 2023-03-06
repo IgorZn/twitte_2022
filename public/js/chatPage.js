@@ -19,6 +19,7 @@ $("#chatNameButton").click((event) => {
 })
 
 $(document).ready(() => {
+    // Update chat name
     $.get(`/api/v1/chats/${chatId}`, (data) => {
         console.log(data)
         setTimeout(()=> {
