@@ -18,3 +18,14 @@ $("#chatNameButton").click((event) => {
     })
 })
 
+$(document).ready(() => {
+    $.get(`/api/v1/chats/${chatId}`, (data) => {
+        console.log(data)
+        setTimeout(()=> {
+            $("#chatName").text(getChatName(data))
+        }, 200)
+
+    })
+})
+
+
