@@ -59,10 +59,10 @@ exports.startChatRoom = async (req, res, next) => {
     *
     * */
 
-    await Chat.find({ users: { $elemMatch: { $eq: req.session.user._id}}})
+    await Chat.find({users: {$elemMatch: {$eq: req.session.user._id}}})
         .populate("users")
         .exec()
-        .then( data => {
+        .then(data => {
             // Add fullname
             data.forEach(chatUsersObj => {
                 chatUsersObj.users.forEach(user => {
@@ -79,3 +79,23 @@ exports.startChatRoom = async (req, res, next) => {
             next(new ErrResponse(err, 404))
         })
 };
+
+
+// @desc        Update chat name
+// @route       PUT /api/v1/chats/:id
+// @access      Private
+exports.updateChatName = async (req, res, next) => {
+    const chatId = req.params.id
+    const newChatName = req.body
+    await Chat.findByIdAndUpdate(chatId, newChatName)
+        .exec()
+        .then(() => {
+            res
+                .status(200)
+                .json({success: true})
+        })
+        .catch(err => {
+            console.log(err)
+            next(new ErrResponse(err, 404))
+        })
+}
