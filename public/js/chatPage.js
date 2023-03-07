@@ -1,4 +1,3 @@
-
 $("#chatNameButton").click((event) => {
     const name = $("#chatNameTextbox").val().trim()
     console.log(name)
@@ -22,7 +21,7 @@ $(document).ready(() => {
     // Update chat name
     $.get(`/api/v1/chats/${chatId}`, (data) => {
         console.log(data)
-        setTimeout(()=> {
+        setTimeout(() => {
             $("#chatName").text(getChatName(data))
         }, 200)
 
@@ -34,7 +33,7 @@ $(".sendMessageButton").click(() => {
 })
 
 $(".inputTextBox").keydown((event) => {
-    if(event.which === 13) {
+    if (event.which === 13) {
         messageSubmitted()
         return false // prevent to do anything further, no new line
     }
@@ -42,7 +41,17 @@ $(".inputTextBox").keydown((event) => {
 
 
 function messageSubmitted() {
-    console.log('messageSubmitted')
+    const content = $(".inputTextBox").val().trim()
+    if (content) {
+        sendMessage(content)
+    }
+    $(".inputTextBox").val("")
+
+}
+
+function sendMessage(content) {
+    console.log('sendMessage>>', content)
+
 }
 
 
