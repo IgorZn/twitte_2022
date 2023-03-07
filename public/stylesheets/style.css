@@ -652,7 +652,7 @@ button span {
     border-radius: 18px;
     border: none;
     padding: 8px 12px;
-    /*height: 38px;*/
+    height: 40px;
 }
 
 .chatContainer .footer button {

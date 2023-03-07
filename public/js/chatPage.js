@@ -29,4 +29,20 @@ $(document).ready(() => {
     })
 })
 
+$(".sendMessageButton").click(() => {
+    messageSubmitted()
+})
+
+$(".inputTextBox").keydown((event) => {
+    if(event.which === 13) {
+        messageSubmitted()
+        return false // prevent to do anything further, no new line
+    }
+})
+
+
+function messageSubmitted() {
+    console.log('messageSubmitted')
+}
+
 
