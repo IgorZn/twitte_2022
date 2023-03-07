@@ -57,6 +57,7 @@ const {routerLogin, routerRegister, routerLogout} = require('./routes/auth.route
 const postsApiRoutes = require('./routes/api/posts.routes');
 const usersApiRoutes = require('./routes/api/users.routes');
 const chatsApiRoutes = require('./routes/api/chats.routes');
+const chatsMessagesApiRoutes = require('./routes/api/messages.routers');
 
 /* View engine setup */
 app.set('views', path.join(__dirname, 'views'));
@@ -84,6 +85,7 @@ app.use('/messages', messagesRouter);
 app.use('/api/v1/posts', postsApiRoutes);
 app.use('/api/v1/users', usersApiRoutes);
 app.use('/api/v1/chats', chatsApiRoutes);
+app.use('/api/v1/messages', chatsMessagesApiRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -50,7 +50,17 @@ function messageSubmitted() {
 }
 
 function sendMessage(content) {
-    console.log('sendMessage>>', content)
+    $.ajax({
+        url: `/api/v1/messages/`,
+        type: "POST",
+        data: {content, chatId},
+        success: (data, status, xhr) => {
+            setTimeout(() => {
+                console.log(data.data)
+            }, 200)
+
+        }
+    })
 
 }
 
