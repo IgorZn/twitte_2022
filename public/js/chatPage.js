@@ -57,6 +57,7 @@ function sendMessage(content) {
         success: (data, status, xhr) => {
             setTimeout(() => {
                 console.log(data.data)
+                addChatMessageHtml(data)
             }, 200)
 
         }
@@ -64,4 +65,25 @@ function sendMessage(content) {
 
 }
 
+function addChatMessageHtml(message) {
+    if (!message.data.content || !message.data._id) {
+        return alert('Message is not valid')
+    }
+
+    const messageDiv = createMessageHtml(message.data);
+    $(".chatMessages").append(messageDiv)
+}
+
+function createMessageHtml(message) {
+    const isMine = message.sender === userLoggedJs._id
+    const liClassName = isMine ? "mine" : "theirs"; // to indicate as my message ot not (style and so on)
+
+    return `<li class='message ${liClassName}'>
+                <div class='messageContainer'>
+                    <span class='messageBody'>
+                        ${message.content}
+                    </span>
+                </div>
+            </li>`;
+}
 
