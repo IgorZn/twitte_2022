@@ -56,7 +56,10 @@ function sendMessage(content) {
         data: {content, chatId},
         success: (data, status, xhr) => {
             setTimeout(() => {
-                console.log(data.data)
+                console.log('sendMessage>>>', data.data, status)
+                if(status != 'success') {
+                    return alert('Internal error')
+                }
                 addChatMessageHtml(data)
             }, 200)
 

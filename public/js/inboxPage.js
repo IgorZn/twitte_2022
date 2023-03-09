@@ -19,7 +19,7 @@ $(document).ready(() => {
 
 
 function outputChatList(chatList, container) {
-    console.log(chatList)
+    console.log('outputChatList>>>', chatList)
     chatList.forEach(chat => {
         const html = createChatHtml(chat)
         container.append(html)
