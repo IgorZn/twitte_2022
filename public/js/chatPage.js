@@ -75,7 +75,7 @@ function addChatMessageHtml(message) {
 }
 
 function createMessageHtml(message) {
-    const isMine = message.sender === userLoggedJs._id
+    const isMine = message.sender._id === userLoggedJs._id
     const liClassName = isMine ? "mine" : "theirs"; // to indicate as my message ot not (style and so on)
 
     return `<li class='message ${liClassName}'>

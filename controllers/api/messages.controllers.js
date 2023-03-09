@@ -1,5 +1,6 @@
 const Message = require("../../models/Message.model");
 const Chat = require("../../models/Chat.model");
+const User = require("../../models/User.model");
 const ErrResponse = require("../../utils/errorResponse");
 
 
@@ -25,6 +26,8 @@ exports.createChatMessage = async (req, res, next) => {
         .then(async data => {
             await Message.create({sender: userId, content, chat: chatId})
                 .then(async message => {
+                    // await User.populate(message, {path: 'sender'})
+                    await message.populate(['sender', 'chat'])
                     res
                         .status(201)
                         .json({success: true, data: message})
