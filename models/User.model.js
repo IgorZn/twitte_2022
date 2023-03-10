@@ -111,7 +111,8 @@ UserSchema.static({
         }
 
     },
-    getFullUserName(userObj) {
+    getFullUserName: async function(userObj) {
+        // console.log('getFullUserName>>>', `${userObj.firstName} ${userObj.lastName}`)
         return `${userObj.firstName} ${userObj.lastName}`
     }
 })

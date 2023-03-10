@@ -4,7 +4,6 @@ const router = express.Router();
 // Controllers
 const {requireLogin} = require("../../middleware/auth.middleware");
 const {createChatMessage} = require("../../controllers/api/messages.controllers");
-const {models} = require("mongoose");
 
 
 router.use(requireLogin);

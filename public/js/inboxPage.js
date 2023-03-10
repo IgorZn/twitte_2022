@@ -34,7 +34,7 @@ function outputChatList(chatList, container) {
 function createChatHtml(chatData) {
     const chatName = getChatName(chatData);
     const image = getChatImageElements(chatData);
-    const latestMessage = "This is the latest message";
+    const latestMessage = getLatestMessage(chatData.latestMessage, chatData.fullName);
 
     return `<a href='/messages/${chatData._id}' class='resultListItem'>
                 ${image}
@@ -44,6 +44,23 @@ function createChatHtml(chatData) {
                 </div>
             </a>`;
 };
+
+
+function getLatestMessage(message, fullName=undefined) {
+    console.log('getLatestMessage>>', message)
+    if(message){
+        const sender = message.sender
+        if(fullName){
+            return `${sender.fullName}: ${message.content}`
+        } else {
+            return `${sender.firstName} ${sender.lastName}: ${message.content}`
+        }
+
+    }
+
+    // None of any last message
+    return "New chat"
+}
 
 
 function getChatName(chatData) {

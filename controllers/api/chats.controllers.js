@@ -25,7 +25,7 @@ exports.createChat = async (req, res, next) => {
 
     return await Chat.create(createChat)
         .then(data => {
-            console.log('Chat.create>>', data)
+            // console.log('Chat.create>>', data)
             res
                 .status(201)
                 .json({status: true, data})
@@ -40,7 +40,7 @@ exports.createChat = async (req, res, next) => {
 
 
 // @desc        Create chat
-// @route       POST /api/v1/chats/:id
+// @route       POST /api/v1/chats/
 // @access      Private
 exports.startChatRoom = async (req, res, next) => {
     /*
@@ -61,14 +61,23 @@ exports.startChatRoom = async (req, res, next) => {
 
     await Chat.find({users: {$elemMatch: {$eq: req.session.user._id}}})
         .populate("users")
+        .populate("latestMessage")
+        .sort({ updatedAt: -1 })
         .exec()
-        .then(data => {
+        .then(async results => {
             // Add fullname
-            data.forEach(chatUsersObj => {
-                chatUsersObj.users.forEach(user => {
-                    user.fullName = User.getFullUserName(user)
+            results.forEach(chatUsersObj => {
+                chatUsersObj.users.forEach(async user => {
+                    user.fullName = await User.getFullUserName(user)
+                    // console.log('data.forEach (user.fullName)>>>', user.fullName)
                 })
             })
+
+            /*
+            * если у нас есть "latestMessage", то мы его детализируем
+            * */
+            const data = await User.populate(results, {path: "latestMessage.sender"})
+
 
             res
                 .status(200)
