@@ -25,7 +25,14 @@ $(document).ready(() => {
             $("#chatName").text(getChatName(data))
         }, 200)
 
-    })
+    });
+
+    $.get(`/api/v1/chats/${chatId}/messages`, (data) => {
+        setTimeout(() => {
+            console.log('messages', data)
+        }, 200)
+
+    });
 })
 
 $(".sendMessageButton").click(() => {

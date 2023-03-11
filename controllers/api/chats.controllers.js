@@ -1,5 +1,6 @@
 const Chat = require("../../models/Chat.model");
 const User = require("../../models/User.model");
+const Messages = require("../../models/Message.model");
 const ErrResponse = require("../../utils/errorResponse");
 
 
@@ -40,7 +41,7 @@ exports.createChat = async (req, res, next) => {
 
 
 // @desc        Create chat
-// @route       POST /api/v1/chats/
+// @route       POST /api/v1/chats
 // @access      Private
 exports.startChatRoom = async (req, res, next) => {
     /*
@@ -108,3 +109,18 @@ exports.updateChatName = async (req, res, next) => {
             next(new ErrResponse(err, 404))
         })
 }
+
+
+// @desc        Display chat messages
+// @route       GET /api/v1/chats/:chatId/messages
+// @access      Private
+exports.chatPageMessages = async (req, res, next) => {
+    await Messages.find({chat: req.params.chatId})
+        .populate("sender")
+        .exec()
+        .then(data => {
+            return res
+                .status(200)
+                .json({success: true, data})
+        }).catch(err => next(new ErrResponse(err, 404)))
+};

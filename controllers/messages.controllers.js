@@ -64,7 +64,7 @@ exports.chatPage = async (req, res, next) => {
     // to avoid access by direct link on another chat
     await Chat.findOne({_id: chatId, users: {$elemMatch: {$eq: userId}}})
         .populate("users")
-        .sort({updateAt: -1 })
+        .sort({updateAt: -1})
         .exec()
         .then(async data => {
             if (data) {
