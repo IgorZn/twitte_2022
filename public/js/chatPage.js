@@ -32,9 +32,12 @@ $(document).ready(() => {
         setTimeout(() => {
             // console.log(data.data)
             const messages = []
-            data.data.forEach(message => {
-                const html = createMessageHtml(message)
+            let lastSenderId = ""
+
+            data.data.forEach((message, index) => {
+                const html = createMessageHtml(message, data.data[index + 1], lastSenderId)
                 messages.push(html)
+                lastSenderId = message.sender._id
             })
 
             // make one big string
@@ -79,7 +82,7 @@ function sendMessage(content) {
         data: {content, chatId},
         success: (data, status, xhr) => {
             setTimeout(() => {
-                console.log('sendMessage>>>', data.data, status)
+                // console.log('sendMessage>>>', data.data, status)
                 if(status != 'success') {
                     return alert('Internal error')
                 }
@@ -96,13 +99,34 @@ function addChatMessageHtml(message) {
         return alert('Message is not valid')
     }
 
-    const messageDiv = createMessageHtml(message.data);
+    const messageDiv = createMessageHtml(message.data, null, "");
     $(".chatMessages").append(messageDiv)
 }
 
-function createMessageHtml(message) {
+function createMessageHtml(message, nextMessage, lastSenderId) {
     const isMine = message.sender._id === userLoggedJs._id
-    const liClassName = isMine ? "mine" : "theirs"; // to indicate as my message ot not (style and so on)
+    let liClassName = isMine ? "mine" : "theirs"; // to indicate as my message ot not (style and so on)
+
+    const sender = message.sender
+    const senderName = `${sender.firstName} ${sender.lastName}`
+    const currentSenderId = sender._id
+    const nextSenderId = nextMessage != null ? nextMessage.sender._id : ""
+
+    /*
+    * if last person 'message.sender._id' not eq 'currentSenderId'
+    * 'currentSenderId' -- who send this message
+    * */
+    const isFirst = lastSenderId == currentSenderId
+    const isLast = nextSenderId != userLoggedJs._id
+
+    if(isFirst){
+        liClassName += " first"
+    }
+
+    if(isLast){
+        liClassName += " last"
+    }
+
 
     return `<li class='message ${liClassName}'>
                 <div class='messageContainer'>
