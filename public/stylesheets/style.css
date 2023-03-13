@@ -739,3 +739,22 @@ button span {
     background-color: var(--blue);
     color: #fff;
 }
+
+/* 229 */
+
+.chatMessages .message.mine.first .messageBody {
+    border-bottom-right-radius: 1px;
+}
+
+.chatMessages .message.mine:not(.first):not(.last) .messageBody {
+    border-bottom-right-radius: 1px;
+    border-top-right-radius: 1px;
+}
+
+.chatMessages .message.mine.last .messageBody {
+    border-bottom-right-radius: 18px;
+}
+
+.chatMessages .message.mine.last:not(.first) .messageBody {
+    border-top-right-radius: 1px;
+}

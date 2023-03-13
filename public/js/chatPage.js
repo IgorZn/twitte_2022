@@ -107,6 +107,7 @@ function createMessageHtml(message, nextMessage, lastSenderId) {
     const isMine = message.sender._id === userLoggedJs._id
     let liClassName = isMine ? "mine" : "theirs"; // to indicate as my message ot not (style and so on)
 
+    // TODO: fix right class first and last, currently it's some mess
     const sender = message.sender
     const senderName = `${sender.firstName} ${sender.lastName}`
     const currentSenderId = sender._id
