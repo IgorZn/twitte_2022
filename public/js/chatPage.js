@@ -43,6 +43,7 @@ $(document).ready(() => {
             // make one big string
             const messagesHtml = messages.join("")
             addMessagesHtmlToPage(messagesHtml)
+            scrollToBottom(false)
 
         }, 100)
 
@@ -101,6 +102,7 @@ function addChatMessageHtml(message) {
 
     const messageDiv = createMessageHtml(message.data, null, "");
     $(".chatMessages").append(messageDiv)
+    scrollToBottom(true)
 }
 
 function createMessageHtml(message, nextMessage, lastSenderId) {
@@ -153,3 +155,15 @@ function createMessageHtml(message, nextMessage, lastSenderId) {
             </li>`;
 }
 
+function scrollToBottom(animated) {
+    const container = $(".chatMessages")
+    const scrollHeight = container[0].scrollHeight;
+
+    if(animated) {
+        container.animate({scrollTop: scrollHeight}, 'slow')
+        window.scrollTo(0, document.body.scrollHeight);
+    } else {
+        container.scrollTop(scrollHeight)
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+}
