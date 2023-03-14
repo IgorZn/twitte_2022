@@ -120,8 +120,13 @@ function createMessageHtml(message, nextMessage, lastSenderId) {
     const isFirst = lastSenderId == currentSenderId
     const isLast = nextSenderId != userLoggedJs._id
 
+    let nameElement = ""
     if(isFirst){
         liClassName += " first"
+
+        if(!isMine){
+            nameElement = `<span class="senderName">${senderName}</span>`
+        }
     }
 
     if(isLast){
@@ -131,6 +136,7 @@ function createMessageHtml(message, nextMessage, lastSenderId) {
 
     return `<li class='message ${liClassName}'>
                 <div class='messageContainer'>
+                    ${nameElement}
                     <span class='messageBody'>
                         ${message.content}
                     </span>
