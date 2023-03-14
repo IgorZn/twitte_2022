@@ -792,3 +792,20 @@ button span {
 senderName {
     color: rgba(0,0,0,0.4);
 }
+
+/* 232 */
+.chatMessages .imageContainer {
+    height: 24px;
+    width: 24px;
+    margin-right: 7px;
+}
+
+.chatMessages img {
+    height: 100%;
+    border-radius: 50%;
+    vertical-align: bottom;
+}
+
+.chatMessages .message.last {
+    margin-bottom: 7px;
+}

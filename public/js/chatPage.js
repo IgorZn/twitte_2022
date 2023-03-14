@@ -83,7 +83,7 @@ function sendMessage(content) {
         success: (data, status, xhr) => {
             setTimeout(() => {
                 // console.log('sendMessage>>>', data.data, status)
-                if(status != 'success') {
+                if (status != 'success') {
                     return alert('Internal error')
                 }
                 addChatMessageHtml(data)
@@ -121,20 +121,29 @@ function createMessageHtml(message, nextMessage, lastSenderId) {
     const isLast = nextSenderId != userLoggedJs._id
 
     let nameElement = ""
-    if(isFirst){
+    if (isFirst) {
         liClassName += " first"
 
-        if(!isMine){
+        if (!isMine) {
             nameElement = `<span class="senderName">${senderName}</span>`
         }
     }
 
-    if(isLast){
+    let profileImage = ""
+    if (isLast) {
         liClassName += " last"
+        profileImage = `<img src="${sender.profilePic}" alt=""/>`
     }
 
+    let imageContainer = ""
+    if (!isMine) {
+        imageContainer = `<div class="imageContainer">
+                                ${profileImage}
+                          </div>`
+    }
 
     return `<li class='message ${liClassName}'>
+                ${imageContainer}
                 <div class='messageContainer'>
                     ${nameElement}
                     <span class='messageBody'>
