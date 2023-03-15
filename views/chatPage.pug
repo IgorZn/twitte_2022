@@ -18,6 +18,11 @@ block content
                 span#chatName(data-toggle="modal", data-target="#chatNameModal") #{chat.chatName}
 
             .mainContentContainer
+                .loadingSpinnerContainer
+                    .d-flex.justify-content-center
+                        .spinner-border(style='width: 3rem; height: 3rem;' role='status')
+                            span.visually-hidden Loading...
+
                 .chatContainer
                     ul.chatMessages
                     .footer

@@ -44,8 +44,8 @@ $(document).ready(() => {
             const messagesHtml = messages.join("")
             addMessagesHtmlToPage(messagesHtml)
             scrollToBottom(false)
-
-        }, 100)
+            $(".loadingSpinnerContainer").remove()
+        }, 300)
 
     });
 })
