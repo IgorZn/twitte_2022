@@ -3,11 +3,11 @@
 /**
  * Module dependencies.
  */
-
-var os = require("os");
+const os = require("os");
 let app = require('../app');
 let debug = require('debug')('twitter-2022:server');
 let http = require('http');
+const { Server } = require("socket.io");
 
 /**
  * Get port from environment and store in Express.
@@ -21,6 +21,18 @@ app.set('port', port);
  */
 
 let server = http.createServer(app);
+
+/**
+ * Enable socket.io
+ * */
+
+const io = new Server(server, {pingTimeout: 60000 })
+
+io.on('connection', client => {
+  console.log(`a user connected ${client}`)
+  client.on('event', data => { /* … */ });
+  client.on('disconnect', () => { /* … */ });
+});
 
 /**
  * Listen on provided port, on all network interfaces.
