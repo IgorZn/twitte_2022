@@ -87,8 +87,8 @@ exports.ApiProfileFollowing = async (req, res, next) => {
 exports.searchUserTab = async (req, res, next) => {
     let searchObj = req.query
     let searchObjQuery
-    console.log('searchObj>>>', searchObj)
-    console.log('searchObj.search>>>', searchObj.search)
+    // console.log('searchObj>>>', searchObj)
+    // console.log('searchObj.search>>>', searchObj.search)
 
     if (req.query.search.length > 0) {
         searchObjQuery = {

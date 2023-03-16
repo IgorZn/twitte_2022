@@ -7,7 +7,7 @@ const os = require("os");
 let app = require('../app');
 let debug = require('debug')('twitter-2022:server');
 let http = require('http');
-const { Server } = require("socket.io");
+const {Server} = require("socket.io");
 
 /**
  * Get port from environment and store in Express.
@@ -26,12 +26,30 @@ let server = http.createServer(app);
  * Enable socket.io
  * */
 
-const io = new Server(server, {pingTimeout: 60000 })
+const io = new Server(server, {pingTimeout: 60000})
 
 io.on('connection', client => {
-  console.log(`a user connected ${client}`)
-  client.on('event', data => { /* … */ });
-  client.on('disconnect', () => { /* … */ });
+
+    // console.log('arguments>>>', arguments)
+    // console.log(`a user connected ${client.toString()}`)
+
+    client.on('setup', user => {
+        console.log(`${user.firstName} ${user.lastName} -- just connected`)
+        /**
+         *  Комната (room) — это произвольный канал, к которому могут присоединяться (join) и выходить сокеты.
+         *  Его можно использовать для трансляции событий подмножеству клиентов.
+         *  https://socket.io/docs/v4/rooms/
+         *
+         * */
+        client.join(user._id) // name of room
+        client.emit("client_connected") // send message to client "connected"
+    })
+
+    console.log(`a user connected ${client}`)
+    client.on('event', data => { /* … */
+    });
+    client.on('disconnect', () => { /* … */
+    });
 });
 
 /**
@@ -47,19 +65,19 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  let port = parseInt(val, 10);
+    let port = parseInt(val, 10);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+    if (port >= 0) {
+        // port number
+        return port;
+    }
 
-  return false;
+    return false;
 }
 
 /**
@@ -67,27 +85,27 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
 
-  let bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+    let bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
 
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
 }
 
 /**
@@ -95,11 +113,11 @@ function onError(error) {
  */
 
 function onListening() {
-  console.log()
-  let addr = server.address();
-  let bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug(`Listening on` + bind);
-  console.log(`Listening on http://${os.hostname()}:` + port)
+    console.log()
+    let addr = server.address();
+    let bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug(`Listening on` + bind);
+    console.log(`Listening on http://${os.hostname()}:` + port)
 }
