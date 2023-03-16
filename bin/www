@@ -36,7 +36,7 @@ io.on('connection', client => {
     client.on('setup', user => {
         console.log(`${user.firstName} ${user.lastName} -- just connected`)
         /**
-         *  Комната (room) — это произвольный канал, к которому могут присоединяться (join) и выходить сокеты.
+         *  Комната (room) — это произвольный канал, к которому могут присоединяться (join) и выходить (leave) сокеты.
          *  Его можно использовать для трансляции событий подмножеству клиентов.
          *  https://socket.io/docs/v4/rooms/
          *
@@ -45,11 +45,15 @@ io.on('connection', client => {
         client.emit("client_connected") // send message to client "connected"
     })
 
-    console.log(`a user connected ${client}`)
-    client.on('event', data => { /* … */
-    });
-    client.on('disconnect', () => { /* … */
-    });
+    /**
+     *  мы получаем chatId по событию "join room" из
+     *  '$(document).ready(() => { socket.emit("join room", chatId) ...}',
+     *  берем этот Id и создаем комнату с ним (Id): roomId => socket.join(roomId)
+     * */
+    client.on("join room", roomId => socket.join(roomId))
+
+    client.on('event', () => {});
+    client.on('disconnect', () => {});
 });
 
 /**

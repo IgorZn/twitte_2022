@@ -18,6 +18,10 @@ $("#chatNameButton").click((event) => {
 })
 
 $(document).ready(() => {
+    socket.emit("join room", chatId)
+
+
+
     // Update chat name
     $.get(`/api/v1/chats/${chatId}`, (data) => {
         console.log(data)
