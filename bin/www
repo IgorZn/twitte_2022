@@ -50,7 +50,18 @@ io.on('connection', client => {
      *  '$(document).ready(() => { socket.emit("join room", chatId) ...}',
      *  берем этот Id и создаем комнату с ним (Id): roomId => socket.join(roomId)
      * */
-    client.on("join room", roomId => socket.join(roomId))
+    client.on("join room", roomId => client.join(roomId))
+
+    // emit message to all clients in "roomId"
+    client.on("typing", roomId => {
+        console.log('roomId...', roomId)
+        console.log('emit typing...')
+        client.to(roomId).emit("typing")
+    })
+
+
+
+
 
     client.on('event', () => {});
     client.on('disconnect', () => {});

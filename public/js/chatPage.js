@@ -19,6 +19,7 @@ $("#chatNameButton").click((event) => {
 
 $(document).ready(() => {
     socket.emit("join room", chatId)
+    socket.on("typing", () => console.log('User is typing'))
 
 
 
@@ -59,11 +60,18 @@ $(".sendMessageButton").click(() => {
 })
 
 $(".inputTextBox").keydown((event) => {
+    updateTyping()
+
+
     if (event.which === 13) {
         messageSubmitted()
         return false // prevent to do anything further, no new line
     }
 })
+
+function updateTyping() {
+    socket.emit("typing", chatId)
+}
 
 function addMessagesHtmlToPage(html) {
     $(".chatMessages").append(html)
