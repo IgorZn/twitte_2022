@@ -1,4 +1,5 @@
 let connected, socket
+connected = false
 socket = io();
 
 socket.emit("setup", userLoggedJs)

@@ -1,3 +1,6 @@
+let typing = false;
+let lastTypingTime, timerLenght;
+
 $("#chatNameButton").click((event) => {
     const name = $("#chatNameTextbox").val().trim()
     console.log(name)
@@ -19,7 +22,12 @@ $("#chatNameButton").click((event) => {
 
 $(document).ready(() => {
     socket.emit("join room", chatId)
-    socket.on("typing", () => $(".typingDots").show())
+    socket.on("typing", () => {
+        $(".typingDots").show()
+    })
+    socket.on("stop_typing", () => {
+        $(".typingDots").hide()
+    })
 
 
 
@@ -70,7 +78,24 @@ $(".inputTextBox").keydown((event) => {
 })
 
 function updateTyping() {
-    socket.emit("typing", chatId)
+    if(!connected) return
+    if(!typing){
+        typing = true
+        socket.emit("typing", chatId)
+    }
+
+    lastTypingTime = new Date().getTime();
+    timerLenght = 3000
+    setTimeout(() => {
+        let timeNow = new Date().getTime();
+        let timeDiff = timeNow - lastTypingTime
+
+        if(timeDiff >= timerLenght && typing){
+            socket.emit("stop_typing", chatId);
+            typing = false;
+        }
+    }, timerLenght)
+
 }
 
 function addMessagesHtmlToPage(html) {

@@ -58,6 +58,10 @@ io.on('connection', client => {
         console.log('emit typing...')
         client.to(roomId).emit("typing")
     })
+    client.on("stop_typing", (roomId)=> {
+        console.log('emit stop_typing to room')
+        client.to(roomId).emit("stop_typing")
+    });
 
 
 
