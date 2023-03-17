@@ -748,6 +748,7 @@ button span {
     flex-direction: row-reverse;
 }
 
+.typingDots img,
 .chatMessages .message.mine .messageBody {
     background-color: var(--blue);
     color: #fff;
@@ -825,3 +826,13 @@ senderName {
 /*    width: 50%;*/
 /*    max-width: 75px;*/
 /*}*/
+
+/* 242 */
+.typingDots {
+    padding: var(--spacing);
+    padding-bottom: 0;
+    display: none;
+}
+.typingDots img {
+    height: 35px;
+}

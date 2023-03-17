@@ -19,7 +19,7 @@ $("#chatNameButton").click((event) => {
 
 $(document).ready(() => {
     socket.emit("join room", chatId)
-    socket.on("typing", () => console.log('User is typing'))
+    socket.on("typing", () => $(".typingDots").show())
 
 
 
