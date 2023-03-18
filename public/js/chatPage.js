@@ -126,6 +126,11 @@ function sendMessage(content) {
                     return alert('Internal error')
                 }
                 addChatMessageHtml(data)
+
+                if(connected){
+                    socket.emit("new_message", data)
+                }
+
             }, 200)
 
         }
