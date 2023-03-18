@@ -30,7 +30,6 @@ $(document).ready(() => {
     })
 
 
-
     // Update chat name
     $.get(`/api/v1/chats/${chatId}`, (data) => {
         console.log(data)
@@ -78,8 +77,8 @@ $(".inputTextBox").keydown((event) => {
 })
 
 function updateTyping() {
-    if(!connected) return
-    if(!typing){
+    if (!connected) return
+    if (!typing) {
         typing = true
         socket.emit("typing", chatId)
     }
@@ -90,7 +89,7 @@ function updateTyping() {
         let timeNow = new Date().getTime();
         let timeDiff = timeNow - lastTypingTime
 
-        if(timeDiff >= timerLenght && typing){
+        if (timeDiff >= timerLenght && typing) {
             socket.emit("stop_typing", chatId);
             typing = false;
         }
@@ -108,6 +107,8 @@ function messageSubmitted() {
     const content = $(".inputTextBox").val().trim()
     if (content) {
         sendMessage(content)
+        socket.emit("stop_typing", chatId);
+        typing = false;
     }
     $(".inputTextBox").val("")
 
@@ -196,7 +197,7 @@ function scrollToBottom(animated) {
     const container = $(".chatMessages")
     const scrollHeight = container[0].scrollHeight;
 
-    if(animated) {
+    if (animated) {
         container.animate({scrollTop: scrollHeight}, 'slow')
         window.scrollTo(0, document.body.scrollHeight);
     } else {
