@@ -592,3 +592,15 @@ function updateSelectedUsersHtml() {
     $(".selectedUser").remove();
     $("#selectedUsers").prepend(elements)
 }
+
+
+function messageReceived(newMessage) {
+    if($(".chatContainer").length == 0) {
+        // we are NOT on the chat page
+        // TODO: popup
+
+    } else {
+        // we are ON the chat page
+        addChatMessageHtml(newMessage)
+    }
+}

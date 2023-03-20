@@ -70,11 +70,12 @@ io.on('connection', client => {
     client.on("new_message", newMessage => {
 
         const chat = newMessage.data.chat;
-        console.log('new_message>>>', newMessage)
-        console.log('chat.users>>>', chat.users)
+        // console.log('new_message>>>', newMessage)
+        // console.log('chat.users>>>', chat.users)
 
         if(!chat) return console.log("Chat.users not defined")
 
+        // notify/display each user in room about new message
         chat.users.forEach(user => {
             if(user._id == newMessage.data.sender._id) return console.log("Skip sender")
             client.to(user._id).emit("message_received", newMessage) // send new message to personal room

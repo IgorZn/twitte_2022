@@ -28,6 +28,7 @@ exports.createChatMessage = async (req, res, next) => {
                 .then(async message => {
                     // await User.populate(message, {path: 'sender'})
                     await message.populate(['sender', 'chat'])
+                    await message.populate({path: 'chat', populate: {path: 'users'}})
 
                     // Add latest message to chat
                     /*
