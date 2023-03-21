@@ -1,4 +1,5 @@
 const User = require('../../models/User.model')
+const Notification = require('../../models/Notification.model')
 const mongoose = require("mongoose");
 const ErrResponse = require('../../utils/errorResponse')
 const path = require("node:path");
@@ -16,6 +17,7 @@ exports.follow = async (req, res, next) => {
         .then(async result => {
             // console.log('result>>>', result)
             const isFollowing = result.followers.includes(sessionUserId)
+
             /*
             If isFollowing remove ($pull)
             from "following" or add ($addToSet)
@@ -31,6 +33,16 @@ exports.follow = async (req, res, next) => {
                 .findByIdAndUpdate(sessionUserId, {[option]: {following: userID}}, {new: true})
                 .exec()
                 .then(async user => {
+                    /**
+                     *  Notification, we don't want to sent notification if
+                     *  stop following of user, but if we START following we'll
+                     *  sent notification
+                     *
+                     *  so if it's no 'isFollowing' it means that we're a new
+                     * */
+                    if(!isFollowing){
+                        await Notification.insertNotification(userID, req.session.user._id, "follow", req.session.user._id)
+                    }
 
                     // Add CURRENT user as follower for "userID"
                     await User
