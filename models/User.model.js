@@ -44,6 +44,13 @@ const UserSchema = new mongoose.Schema({
     followers: [{type: 'ObjectId', ref: 'User'}],
 
 }, {
+    virtuals: {
+        getFullName: {
+            get() {
+                return this.firstName + ' ' + this.lastName;
+            }
+        }
+    },
     timestamps: true
 });
 
@@ -59,7 +66,7 @@ UserSchema.pre('save', async function (next) {
 })
 
 const isFollowing = (user, currentLoggedInUser) => {
-  return currentLoggedInUser.following && currentLoggedInUser.following.includes(user._id.toString())
+    return currentLoggedInUser.following && currentLoggedInUser.following.includes(user._id.toString())
 }
 UserSchema.static({
     matchPassword: async function (plainTextPassword, hashedPassword) {
@@ -111,7 +118,7 @@ UserSchema.static({
         }
 
     },
-    getFullUserName: async function(userObj) {
+    getFullUserName: async function (userObj) {
         // console.log('getFullUserName>>>', `${userObj.firstName} ${userObj.lastName}`)
         return `${userObj.firstName} ${userObj.lastName}`
     }

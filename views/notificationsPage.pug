@@ -1,0 +1,13 @@
+extends layouts/main-layout
+
+block content
+  p Welcome to #{title}
+  p #{user.username}
+  .resultsContainer
+
+block headerButton
+  a(href="/messages/new")
+    i.fas.fa-plus
+
+block scripts
+  script(src='/js/notificationsPage.js')

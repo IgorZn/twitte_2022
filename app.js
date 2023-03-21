@@ -53,6 +53,7 @@ const postRouter = require('./routes/postPage.routes');
 const profileRouter = require('./routes/profile.routes');
 const searchRouter = require('./routes/search.routes');
 const messagesRouter = require('./routes/messages.routes');
+const notificationsRouter = require('./routes/notifications.routes');
 const {routerLogin, routerRegister, routerLogout} = require('./routes/auth.routes');
 
 /* API routes*/
@@ -82,6 +83,7 @@ app.use('/users', usersRouter);
 app.use('/profile', profileRouter);
 app.use('/search', searchRouter);
 app.use('/messages', messagesRouter);
+app.use('/notifications', notificationsRouter);
 
 /* Api routes */
 app.use('/api/v1/posts', postsApiRoutes);
