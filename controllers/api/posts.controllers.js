@@ -1,12 +1,13 @@
 const Post = require('../../models/Post.model')
 const User = require('../../models/User.model')
+const Notification = require('../../models/Notification.model')
 const colors = require('colors');
 
 // @desc        Add post
 // @route       POST /api/v1/posts
 // @access      Private
 exports.addPost = async (req, res, next) => {
-    console.log(req.body)
+    // console.log(req.body)
     const {content, replyTo} = req.body
     if (!content) {
         console.log("Content is empty")
@@ -23,7 +24,15 @@ exports.addPost = async (req, res, next) => {
 
     await Post.create(context)
         .then(async data => {
-            const populatedData = await User.populate(data, {path: 'postedBy'})
+            let populatedData = await User.populate(data, {path: 'postedBy'})
+            populatedData = await Post.populate(populatedData, {path: 'replyTo'})
+
+            if (populatedData.replyTo !== undefined) {
+                        await Notification
+                            .insertNotification(populatedData.replyTo.postedBy, req.session.user._id, "reply", populatedData._id)
+                            .catch(err => console.log(err))
+                    }
+
             res
                 .status(201)
                 .json({success: true, data: populatedData})
@@ -76,19 +85,19 @@ exports.getPostByID = async (req, res, next) => {
 exports.likePost = async (req, res, next) => {
     const postID = req.params.id
     const userID = req.session.user._id
-    /*
-    *  есть или нет '.likes' в объекте сессия
-    *  и если есть, то включает ли ID поста?
-    * */
+    /**
+     *  есть или нет '.likes' в объекте сессия
+     *  и если есть, то включает ли ID поста?
+     * */
     const isLiked = req.session.user.likes && req.session.user.likes.includes(postID)
 
-    /*
+    /**
     *  isLiked -- true -- хотим удалить like, т.к. он уже есть
     *  isLiked -- false -- хотим like`кнуть пост, т.к. его нет в 'req.session.user.'
     * */
 
 
-    /*
+    /**
         $addToSet (множество) добавляет значение в массив,
         если только это значение уже не присутствует, и в этом случае
         $addToSet ничего не делает с этим массивом.
@@ -112,8 +121,14 @@ exports.likePost = async (req, res, next) => {
             await Post
                 .findByIdAndUpdate(postID, {[option]: {likes: userID}}, {new: true})
                 .exec()
-                .then(data => {
-                    console.log('post>>>', data.likes.length)
+                .then(async data => {
+                    // console.log('post>>>', data.likes.length)
+
+                    if (!isLiked) {
+                        await Notification.insertNotification(data.postedBy, userID, "postLike", data._id)
+                    }
+
+
                     res
                         .status(201)
                         .json({status: true, data, likes: data.likes.length})
@@ -193,13 +208,17 @@ exports.retweetPost = async (req, res, next) => {
     const postID = req.params.id
     const userID = req.session.user._id
 
-    // Try and delete retweet
+    /**
+     *  create or delete retweet
+     *   - if we have found retweet -> delete
+     *   - if we didn't find -> that is first retweet -> create retweet
+     * */
     const deletedPost = await Post.findOneAndDelete({postedBy: userID, retweetData: postID})
         .catch(err => console.log(err))
 
     /*
     * если null, то добавить
-    * если не null, то удалить
+    * если НЕ null, то удалить
     */
     const option = deletedPost != null ? "$pull" : "$addToSet"
     let repost = deletedPost
@@ -220,8 +239,15 @@ exports.retweetPost = async (req, res, next) => {
             await Post
                 .findByIdAndUpdate(postID, {[option]: {retweetUsers: userID}}, {new: true})
                 .exec()
-                .then(data => {
-                    console.log('post>>>', data.likes.length)
+                .then(async data => {
+                    // console.log('retweetPost> post>>>', data.likes.length)
+                    // console.log('retweetPost> post>>>', data)
+
+                    if (!deletedPost) {
+                        await Notification.insertNotification(data.postedBy, userID, "retweet", data._id)
+                    }
+
+
                     res
                         .status(201)
                         .json({status: true, data, likes: data.likes.length})
@@ -244,12 +270,13 @@ exports.retweetPost = async (req, res, next) => {
 // @route       GET /api/v1/posts
 // @access      Private
 exports.getPosts = async (req, res, next) => {
-    console.log('getPosts>>>',req.query)
+    console.log('getPosts>>>', req.query)
     if (!req.session.user) {
         res
             .status(404)
             .redirect('/login')
-    };
+    }
+    ;
 
     const searchObj = req.query;
 
@@ -265,13 +292,15 @@ exports.getPosts = async (req, res, next) => {
          */
         searchObj.replyTo = {$exists: isReply}
         delete searchObj.isReply
-    };
+    }
+    ;
 
     if (searchObj.search) {
-        console.log('if searchObj.search>>',searchObj.search)
-        searchObj.content = { $regex: searchObj.search, $options: "i"}
+        console.log('if searchObj.search>>', searchObj.search)
+        searchObj.content = {$regex: searchObj.search, $options: "i"}
         delete searchObj.search
-    };
+    }
+    ;
 
     if (searchObj.followingOnly) {
         const followingOnly = searchObj.followingOnly == 'true'
@@ -285,7 +314,8 @@ exports.getPosts = async (req, res, next) => {
 
         delete searchObj.followingOnly
 
-    };
+    }
+    ;
 
 
     console.log('searchObj>>>', searchObj);
