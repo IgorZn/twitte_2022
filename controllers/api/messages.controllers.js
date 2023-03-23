@@ -1,6 +1,7 @@
 const Message = require("../../models/Message.model");
 const Chat = require("../../models/Chat.model");
 const User = require("../../models/User.model");
+const Notification = require('../../models/Notification.model')
 const ErrResponse = require("../../utils/errorResponse");
 
 
@@ -43,7 +44,16 @@ exports.createChatMessage = async (req, res, next) => {
                     * */
                     await Chat.findByIdAndUpdate(chatId, { latestMessage: message})
                         .then(data => {
-                            // console.log('latestMessage: message>>', data)
+                            console.log('latestMessage: data>>', data)
+                            console.log('latestMessage: message>>', message)
+
+                            // Insert Notification
+                            data.users.forEach(userId => {
+                                if (userId.toString() === message.sender._id.toString()) return
+                                Notification
+                                        .insertNotification(userId, message.sender._id, "newMessage", message.chat._id)
+                            })
+
                         })
                         .catch( err => next(new ErrResponse(err, 404)))
 
