@@ -276,7 +276,6 @@ exports.getPosts = async (req, res, next) => {
             .status(404)
             .redirect('/login')
     }
-    ;
 
     const searchObj = req.query;
 
@@ -293,14 +292,12 @@ exports.getPosts = async (req, res, next) => {
         searchObj.replyTo = {$exists: isReply}
         delete searchObj.isReply
     }
-    ;
 
     if (searchObj.search) {
         console.log('if searchObj.search>>', searchObj.search)
         searchObj.content = {$regex: searchObj.search, $options: "i"}
         delete searchObj.search
     }
-    ;
 
     if (searchObj.followingOnly) {
         const followingOnly = searchObj.followingOnly == 'true'
@@ -315,7 +312,6 @@ exports.getPosts = async (req, res, next) => {
         delete searchObj.followingOnly
 
     }
-    ;
 
 
     console.log('searchObj>>>', searchObj);
