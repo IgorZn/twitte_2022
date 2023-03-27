@@ -19,6 +19,7 @@ exports.getNotifications = async (req, res, next) => {
         .populate("userFrom")
         .sort({createdAt: -1})
         .then(data => {
+            data.fullName = data.fullName
             res
                 .status(200)
                 .json({status: true, data})
