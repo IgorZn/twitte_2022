@@ -814,6 +814,11 @@ senderName {
     margin-bottom: 7px;
 }
 
+/* 258 */
+.resultListItem.active {
+    background-color: var(--blueBackground);
+}
+
 /* 235 */
 .loadingSpinnerContainer {
     display: flex;
