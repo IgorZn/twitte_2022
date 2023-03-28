@@ -28,3 +28,22 @@ exports.getNotifications = async (req, res, next) => {
 
 
 };
+
+
+// @desc        Update notification status: new/opened
+// @route       PUT /api/v1/notifications/:id/markAsOpened
+// @access      Private
+exports.updateStatusOfNotification = async (req, res, next) => {
+    const notificationID = req.params.id
+    // console.log('getNotifications>>>', userID)
+
+    await Notifications.findByIdAndUpdate(notificationID, {opened: true})
+        .then(() => {
+             res
+                .status(200)
+                .json({status: true})
+        })
+        .catch(err => next(new ErrResponse(err, 404)))
+
+
+};
