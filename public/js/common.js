@@ -151,6 +151,8 @@ $(document).on("click", ".notification.active", (e) => {
     markNotificationAsOpened(notificationId, callback);
 })
 
+$(document).on("click", "#markNotificationsAsRead", () => markNotificationAsOpened())
+
 // -- Document
 
 $(document).on("click", ".likeButton", (event) => {

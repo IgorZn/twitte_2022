@@ -47,3 +47,22 @@ exports.updateStatusOfNotification = async (req, res, next) => {
 
 
 };
+
+
+// @desc        Update notification status all to opened
+// @route       PUT /api/v1/notifications/markAsOpened
+// @access      Private
+exports.updateStatusOfAllNotification = async (req, res, next) => {
+    const userID = req.session.user._id
+    // console.log('getNotifications>>>', userID)
+
+    await Notifications.updateMany({userTo: userID}, {opened: true})
+        .then(() => {
+             res
+                .status(200)
+                .json({status: true})
+        })
+        .catch(err => next(new ErrResponse(err, 404)))
+
+
+};
