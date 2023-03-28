@@ -140,6 +140,17 @@ $("#createChatButton").click((event) => {
     })
 })
 
+$(document).on("click", ".notification.active", (e) => {
+    const container = $(e.target);
+    const notificationId = container.data().id
+
+    const href = container.attr("href")
+    e.preventDefault() // prevent normal behaviour to happening
+
+    const callback = () => window.location = href;
+    markNotificationAsOpened(notificationId, callback);
+})
+
 // -- Document
 
 $(document).on("click", ".likeButton", (event) => {
@@ -609,18 +620,13 @@ function messageReceived(newMessage) {
 function markNotificationAsOpened(notificationId = null, callback = null) {
     if(!callback) callback = () => location.reload()
 
-    const singleURL = `/api/notification/${notificationId}/markAsOpened`
-    const markAllURL = '/api/notification/markAsOpened'
+    const singleURL = `/api/v1/notifications/${notificationId}/markAsOpened`
+    const markAllURL = '/api/v1/notifications/markAsOpened'
     const URL = notificationId != null ? singleURL : markAllURL
 
     $.ajax({
         url: URL,
         type: "PUT",
-        success: (data, status, xhr) => {
-            setTimeout(() => {
-                callback()
-            }, 200)
-
-        }
+        success: (data, status, xhr) => callback()
     })
 }

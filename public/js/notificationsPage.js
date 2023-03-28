@@ -22,7 +22,7 @@ function createNotificationHtml(notification) {
     const url = getNotificationUrl(notification)
     const className = notification.opened ? "" : "active"
 
-    return `<a href=${url} class='resultListItem notification ${className}'>
+    return `<a href=${url} class='resultListItem notification ${className}' data-id="${notification._id}">
                 <div class='resultsImageContainer'>
                     <img src='${userFrom.profilePic}'>
                 </div>
