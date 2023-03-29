@@ -9,12 +9,20 @@ exports.getNotifications = async (req, res, next) => {
     const userID = req.session.user._id
     // console.log('getNotifications>>>', userID)
 
-    await Notifications.find({
+    const searchObj = {
         userTo: new ObjectId(userID),
         notificationType: {
             '$ne': 'newMessage'
         }
-    })
+    }
+
+    /**
+     * */
+    if (req.query.unreadOnly && req.query.unreadOnly.includes(true)) {
+        searchObj.opened = false
+    }
+
+    await Notifications.find(searchObj)
         .populate("userTo")
         .populate("userFrom")
         .sort({createdAt: -1})
@@ -39,7 +47,7 @@ exports.updateStatusOfNotification = async (req, res, next) => {
 
     await Notifications.findByIdAndUpdate(notificationID, {opened: true})
         .then(() => {
-             res
+            res
                 .status(200)
                 .json({status: true})
         })
@@ -58,7 +66,7 @@ exports.updateStatusOfAllNotification = async (req, res, next) => {
 
     await Notifications.updateMany({userTo: userID}, {opened: true})
         .then(() => {
-             res
+            res
                 .status(200)
                 .json({status: true})
         })

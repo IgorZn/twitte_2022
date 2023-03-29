@@ -8,6 +8,7 @@ let selectedUsers = [];
 
 $(document).ready(() => {
     refreshMessagesBadge()
+    refreshNotificationsBadge()
 })
 
 $("#postTextarea, #replayTextarea").keyup(event => {
@@ -620,6 +621,8 @@ function messageReceived(newMessage) {
         // we are ON the chat page
         addChatMessageHtml(newMessage)
     }
+
+    refreshMessagesBadge()
 }
 
 
@@ -647,6 +650,21 @@ function refreshMessagesBadge() {
             $("#messagesBadge").text(numResults).addClass("active")
         } else {
             $("#messagesBadge").text("").removeClass("active")
+        }
+
+    })
+
+}
+
+function refreshNotificationsBadge() {
+    $.get('api/v1/notifications', {unreadOnly: true}, data => {
+        console.log("refreshNotificationsBadge>>>", data.data.length)
+        const numResults = data.data.length
+
+        if(numResults){
+            $("#notificationBadge").text(numResults).addClass("active")
+        } else {
+            $("#notificationBadge").text("").removeClass("active")
         }
 
     })
