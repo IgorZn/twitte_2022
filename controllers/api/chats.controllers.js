@@ -79,6 +79,12 @@ exports.startChatRoom = async (req, res, next) => {
             * */
             const data = await User.populate(results, {path: "latestMessage.sender"})
 
+            /**
+             * */
+            if(req.query.unreadOnly && req.query.unreadOnly.includes(true)){
+                results = results.filter( r => !r.latestMessage.readBy.includes(req.session.user._id))
+            }
+
 
             res
                 .status(200)

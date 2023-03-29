@@ -6,6 +6,10 @@ let selectedUsers = [];
 
 // -- On Event
 
+$(document).ready(() => {
+    refreshMessagesBadge()
+})
+
 $("#postTextarea, #replayTextarea").keyup(event => {
     let textbox = $(event.target);
     let value = textbox.val().trim();
@@ -631,4 +635,12 @@ function markNotificationAsOpened(notificationId = null, callback = null) {
         type: "PUT",
         success: (data, status, xhr) => callback()
     })
+}
+
+
+function refreshMessagesBadge() {
+    $.get('api/v1/chats', {unreadOnly: true }, data => {
+       console.log('refreshMessagesBadge>>',data.data.length)
+    })
+    
 }
