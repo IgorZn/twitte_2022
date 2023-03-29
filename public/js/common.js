@@ -562,7 +562,7 @@ function outputSelectableUsers(results, container) {
     if (results.length > 0) {
         results.forEach(result => {
             // skip in output himself
-            if(result._id == userLoggedJs._id || selectedUsers.some(u => u._id == result._id)){
+            if (result._id == userLoggedJs._id || selectedUsers.some(u => u._id == result._id)) {
                 /*
                 *  if user (result) already exist in an array and
                 *  check that selectedUsers don't contain current user (result)
@@ -599,7 +599,7 @@ function updateSelectedUsersHtml() {
     const elements = []
     console.log(selectedUsers)
 
-    selectedUsers.forEach( userObj => {
+    selectedUsers.forEach(userObj => {
         const name = `${userObj.firstName} ${userObj.lastName}`
         const userElement = $(`<span class='selectedUser'>${name}</span>`)
         console.log(userElement)
@@ -612,7 +612,7 @@ function updateSelectedUsersHtml() {
 
 
 function messageReceived(newMessage) {
-    if($(".chatContainer").length == 0) {
+    if ($(".chatContainer").length == 0) {
         // we are NOT on the chat page
         // TODO: popup
 
@@ -624,7 +624,7 @@ function messageReceived(newMessage) {
 
 
 function markNotificationAsOpened(notificationId = null, callback = null) {
-    if(!callback) callback = () => location.reload()
+    if (!callback) callback = () => location.reload()
 
     const singleURL = `/api/v1/notifications/${notificationId}/markAsOpened`
     const markAllURL = '/api/v1/notifications/markAsOpened'
@@ -639,8 +639,16 @@ function markNotificationAsOpened(notificationId = null, callback = null) {
 
 
 function refreshMessagesBadge() {
-    $.get('api/v1/chats', {unreadOnly: true }, data => {
-       console.log('refreshMessagesBadge>>',data.data.length)
+    $.get('api/v1/chats', {unreadOnly: true}, data => {
+        console.log("refreshMessagesBadge>>>", data.data.length)
+        const numResults = data.data.length
+
+        if(numResults){
+            $("#messagesBadge").text(numResults).addClass("active")
+        } else {
+            $("#messagesBadge").text("").removeClass("active")
+        }
+
     })
-    
+
 }
