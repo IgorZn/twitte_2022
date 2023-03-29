@@ -656,6 +656,7 @@ function refreshMessagesBadge() {
 
 }
 
+
 function refreshNotificationsBadge() {
     $.get('api/v1/notifications', {unreadOnly: true}, data => {
         console.log("refreshNotificationsBadge>>>", data.data.length)
