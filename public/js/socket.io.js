@@ -11,3 +11,12 @@ socket.on("client_connected", () => {
 // Received new message and display/notify user
 socket.on("message_received", newMessage => messageReceived(newMessage));
 
+socket.on("notification_received", newNotification => {
+    console.log("notification_received")
+})
+
+function emitNotification(userId) {
+    if(userId === userLoggedJs._id) return
+    socket.emit("notification_received", userId)
+}
+

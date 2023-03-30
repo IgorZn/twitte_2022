@@ -45,6 +45,9 @@ $("#submitPostButton, #submitReplayButton").click(() => {
 
     $.post("/api/v1/posts", data, postData => {
         if (postData.data.replyTo) {
+            // TODO: console.log(postData.data.replyTo.postedBy)
+            // NEED to fix it
+            emitNotification(postData.data.replyTo.postedBy)
             location.reload()
         } else {
             // console.log('to >> createPostHTML', postData)
@@ -173,6 +176,7 @@ $(document).on("click", ".likeButton", (event) => {
             button.find("span").text(postData.likes || "");
             if (postData.data.likes.includes(userLoggedJs._id)) {
                 button.addClass("active")
+                emitNotification(postData.data.postedBy)
             } else {
                 button.removeClass("active")
             }
@@ -195,6 +199,7 @@ $(document).on("click", ".retweetButton", (event) => {
             button.find("span").text(postData.data.retweetUsers.length || "");
             if (postData.data.retweetUsers.includes(userLoggedJs._id)) {
                 button.addClass("active")
+                emitNotification(postData.data.postedBy)
             } else {
                 button.removeClass("active")
             }
@@ -231,8 +236,11 @@ $(document).on("click", ".followButton", (event) => {
             let diffFoll = 1
             if (data.following && data.following.includes(userId)) {
                 button.addClass("following")
+                button.text("Following")
+                emitNotification(userId)
             } else {
                 button.removeClass("following")
+                button.text("Follow")
                 diffFoll = -1
             }
 

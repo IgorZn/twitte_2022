@@ -84,8 +84,10 @@ io.on('connection', client => {
 
     })
 
-    client.on("new_notification", () => {
-
+    client.on("notification_received", userId => {
+        console.log('www>>>', "notification_received")
+        console.log('userId>>>', userId)
+        client.to(userId).emit("notification_received")
     })
 
 
