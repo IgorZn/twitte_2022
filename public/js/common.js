@@ -679,3 +679,12 @@ function refreshNotificationsBadge() {
     })
 
 }
+
+
+function showNotificationPopup(data) {
+    const html = createNotificationHtml(data)
+    const element = $(html)
+    element.prependTo("#notificationList")
+
+    setTimeout(() => element.fadeOut(400), 2000)
+}

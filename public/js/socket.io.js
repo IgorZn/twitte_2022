@@ -11,8 +11,9 @@ socket.on("client_connected", () => {
 // Received new message and display/notify user
 socket.on("message_received", newMessage => messageReceived(newMessage));
 
-socket.on("notification_received", newNotification => {
+socket.on("notification_received", () => {
     $.get("/api/v1/notifications/latest", notificationData => {
+        showNotificationPopup(notificationData.data)
         refreshNotificationsBadge()
     })
 })
