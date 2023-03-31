@@ -37,6 +37,28 @@ exports.getNotifications = async (req, res, next) => {
 
 };
 
+// @desc        Get latest notifications
+// @route       GET /api/v1/notifications/latest
+// @access      Private
+exports.getLatestNotifications = async (req, res, next) => {
+    const userID = req.session.user._id
+    // console.log('getNotifications>>>', userID)
+
+    await Notifications.findOne({userTo: new ObjectId(userID)})
+        .populate("userTo")
+        .populate("userFrom")
+        .sort({createdAt: -1})
+        .then(data => {
+            data.fullName = data.fullName
+            res
+                .status(200)
+                .json({status: true, data})
+        })
+        .catch(err => next(new ErrResponse(err, 404)))
+
+
+};
+
 
 // @desc        Update notification status: new/opened
 // @route       PUT /api/v1/notifications/:id/markAsOpened

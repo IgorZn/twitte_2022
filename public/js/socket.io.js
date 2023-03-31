@@ -12,11 +12,13 @@ socket.on("client_connected", () => {
 socket.on("message_received", newMessage => messageReceived(newMessage));
 
 socket.on("notification_received", newNotification => {
-    console.log("notification_received")
+    $.get("/api/v1/notifications/latest", notificationData => {
+        refreshNotificationsBadge()
+    })
 })
 
 function emitNotification(userId) {
-    if(userId === userLoggedJs._id) return
+    if (userId === userLoggedJs._id) return
     socket.emit("notification_received", userId)
 }
 

@@ -3,13 +3,21 @@ const router = express.Router();
 
 // Controllers
 const {requireLogin} = require("../../middleware/auth.middleware");
-const {getNotifications, updateStatusOfNotification, updateStatusOfAllNotification} = require("../../controllers/api/notificationApi.constrollers");
+const {
+    getNotifications,
+    updateStatusOfNotification,
+    updateStatusOfAllNotification,
+    getLatestNotifications
+} = require("../../controllers/api/notificationApi.constrollers");
 
 
 router.use(requireLogin);
 
 router.route('/')
     .get(getNotifications)
+
+router.route('/latest')
+    .get(getLatestNotifications)
 
 router.route('/:id/markAsOpened')
     .put(updateStatusOfNotification)
