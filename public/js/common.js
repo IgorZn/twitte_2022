@@ -684,7 +684,7 @@ function refreshNotificationsBadge() {
 function showNotificationPopup(data) {
     const html = createNotificationHtml(data)
     const element = $(html)
-    element.prependTo("#notificationList")
+    element.hide().prependTo("#notificationList").slideDown("fast")
 
     setTimeout(() => element.fadeOut(400), 2000)
 }
