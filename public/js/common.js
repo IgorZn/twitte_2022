@@ -622,8 +622,12 @@ function updateSelectedUsersHtml() {
 
 function messageReceived(newMessage) {
     if ($(".chatContainer").length == 0) {
-        // we are NOT on the chat page
-        // TODO: popup
+        /**
+         * we are NOT on the chat page, because
+         * no ".chatContainer" on the page
+         */
+
+        showMessagePopup(newMessage)
 
     } else {
         // we are ON the chat page
@@ -654,7 +658,7 @@ function refreshMessagesBadge() {
         console.log("refreshMessagesBadge>>>", data.data.length)
         const numResults = data.data.length
 
-        if(numResults){
+        if (numResults) {
             $("#messagesBadge").text(numResults).addClass("active")
         } else {
             $("#messagesBadge").text("").removeClass("active")
@@ -670,7 +674,7 @@ function refreshNotificationsBadge() {
         console.log("refreshNotificationsBadge>>>", data.data.length)
         const numResults = data.data.length
 
-        if(numResults){
+        if (numResults) {
             $("#notificationBadge").text(numResults).addClass("active")
         } else {
             $("#notificationBadge").text("").removeClass("active")
@@ -683,6 +687,162 @@ function refreshNotificationsBadge() {
 
 function showNotificationPopup(data) {
     const html = createNotificationHtml(data)
+    const element = $(html)
+    element.hide().prependTo("#notificationList").slideDown("fast")
+
+    setTimeout(() => element.fadeOut(400), 2000)
+}
+
+
+function createNotificationHtml(notification) {
+    const userFrom = notification.userFrom
+    const text = getNotificationText(notification)
+    const url = getNotificationUrl(notification)
+    const className = notification.opened ? "" : "active"
+
+    return `<a href=${url} class='resultListItem notification ${className}' data-id="${notification._id}">
+                <div class='resultsImageContainer'>
+                    <img src='${userFrom.profilePic}'>
+                </div>
+                <div class='resultsDetailsContainer ellipsis'>
+                    <span class='ellipsis'>${text}</span>
+                </div>
+            </a>`;
+}
+
+
+function getNotificationText(notification) {
+    const userForm = notification.userFrom
+    if(!userForm.firstName || !userForm.lastName){
+        return alert('User data is not populated')
+    }
+
+    const userFromName = `${userForm.firstName} ${userForm.lastName}`
+    let text
+
+    if(notification.notificationType == "retweet") {
+        text = `${userFromName} retweeted one of your post`
+    }
+    if(notification.notificationType == "postLike") {
+        text = `${userFromName} liked one of your post`
+    }
+    if(notification.notificationType == "reply") {
+        text = `${userFromName} replied to you`
+    }
+    if(notification.notificationType == "follow") {
+        text = `${userFromName} followed to you`
+    }
+
+
+    return `<span class=ellipsis>${text}</span>`
+
+}
+
+
+function getNotificationUrl(notification) {
+    let url
+    const RRR = ['retweet', 'postLike', 'reply'].some((el) => {
+           return el === notification.notificationType
+        })
+
+    if(RRR) {
+        url = `/post/${notification.entityId}`
+    }
+
+    if(notification.notificationType == "follow") {
+        url = `/profile/${notification.userFrom._id}`
+    }
+
+    return url
+
+}
+
+
+function createChatHtml(chatData) {
+    const chatName = getChatName(chatData);
+    const image = getChatImageElements(chatData);
+    const latestMessage = getLatestMessage(chatData.latestMessage, chatData.fullName);
+
+    return `<a href='/messages/${chatData._id}' class='resultListItem'>
+                ${image}
+                <div class='resultsDetailsContainer ellipsis'>
+                    <span class='heading ellipsis'>${chatName}</span>
+                    <span class='subText ellipsis'>${latestMessage}</span>
+                </div>
+            </a>`;
+};
+
+
+function getOtherChatUsers(users) {
+    if(users.length == 1) return users
+    return users.filter(user => user._id != userLoggedJs._id)
+}
+
+
+function getChatImageElements(chatData) {
+    const otherChatUsers = getOtherChatUsers(chatData.users)
+
+    let groupChatClass = "";
+    let chatImage = getUserChatImageElement(otherChatUsers[0])
+
+    if(otherChatUsers.length > 1) {
+        groupChatClass = "groupChatImage";
+
+        // simple add another image to 'chatImage'
+        chatImage += getUserChatImageElement(otherChatUsers[1])
+    }
+    // console.log(chatImage)
+    return `<div class='resultsImageContainer ${groupChatClass}'>${chatImage}</div>`;
+
+}
+
+
+function getUserChatImageElement(user){
+    if(!user || !user.profilePic){
+        return alert("User passed into function is invalid")
+    }
+
+    return `<img src='${user.profilePic}' alt='User's profile pic'>`;
+}
+
+
+function getLatestMessage(message, fullName=undefined) {
+    console.log('getLatestMessage>>', message)
+    if(message){
+        const sender = message.sender
+        if(fullName){
+            return `${sender.fullName}: ${message.content}`
+        } else {
+            return `${sender.firstName} ${sender.lastName}: ${message.content}`
+        }
+
+    }
+
+    // None of any last message
+    return "New chat"
+}
+
+
+function getChatName(chatData) {
+    let chatName = chatData.chatName
+
+    if(!chatName){
+        const otherChatUsers = getOtherChatUsers(chatData.users);
+        const namesArrray = otherChatUsers.map( user => `${user.firstName} ${user.lastName}`)
+        chatName = namesArrray.join(', ')
+    }
+
+    return chatName
+
+}
+
+
+function showMessagePopup(data) {
+    if(!data.data.chat.latestMessage.hasOwnProperty('_id')){
+        data.data.chat.latestMessage = data.data
+    }
+
+    const html = createChatHtml(data.data.chat)
     const element = $(html)
     element.hide().prependTo("#notificationList").slideDown("fast")
 
