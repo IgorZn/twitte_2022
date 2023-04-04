@@ -654,7 +654,7 @@ function markNotificationAsOpened(notificationId = null, callback = null) {
 
 
 function refreshMessagesBadge() {
-    $.get('api/v1/chats', {unreadOnly: true}, data => {
+    $.get('/api/v1/chats', {unreadOnly: true}, data => {
         console.log("refreshMessagesBadge>>>", data.data.length)
         const numResults = data.data.length
 
@@ -670,7 +670,7 @@ function refreshMessagesBadge() {
 
 
 function refreshNotificationsBadge() {
-    $.get('api/v1/notifications', {unreadOnly: true}, data => {
+    $.get('/api/v1/notifications', {unreadOnly: true}, data => {
         console.log("refreshNotificationsBadge>>>", data.data.length)
         const numResults = data.data.length
 
@@ -763,7 +763,9 @@ function createChatHtml(chatData) {
     const image = getChatImageElements(chatData);
     const latestMessage = getLatestMessage(chatData.latestMessage, chatData.fullName);
 
-    return `<a href='/messages/${chatData._id}' class='resultListItem'>
+    const activeClass = chatData.latestMessage.readBy.includes(userLoggedJs._id) ? "" : "active"
+
+    return `<a href='/messages/${chatData._id}' class='resultListItem ${activeClass}'>
                 ${image}
                 <div class='resultsDetailsContainer ellipsis'>
                     <span class='heading ellipsis'>${chatName}</span>
