@@ -23,7 +23,7 @@ block content
                         .spinner-border(style='width: 3rem; height: 3rem;' role='status')
                             span.visually-hidden Loading...
 
-                .chatContainer
+                .chatContainer(data-room=chat._id)
                     ul.chatMessages
                     .typingDots
                         img(src="/images/typing-texting.gif")

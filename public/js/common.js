@@ -621,7 +621,7 @@ function updateSelectedUsersHtml() {
 
 
 function messageReceived(newMessage) {
-    if ($(".chatContainer").length == 0) {
+    if ($(`[data-room=${newMessage.chat._id}`).length == 0) {
         /**
          * we are NOT on the chat page, because
          * no ".chatContainer" on the page
