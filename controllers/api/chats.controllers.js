@@ -130,3 +130,17 @@ exports.chatPageMessages = async (req, res, next) => {
                 .json({success: true, data})
         }).catch(err => next(new ErrResponse(err, 404)))
 };
+
+
+// @desc        Mark All messages as read
+// @route       PUT /api/v1/chats/:chatId/messages/markAsRead
+// @access      Private
+exports.markAllMessagesAsRead = async (req, res, next) => {
+    await Messages.updateMany({chat: req.params.chatId}, { $addToSet: { readBy: req.session.user._id} })
+        .exec()
+        .then(data => {
+            return res
+                .status(200)
+                .json({success: true, data})
+        }).catch(err => next(new ErrResponse(err, 404)))
+};

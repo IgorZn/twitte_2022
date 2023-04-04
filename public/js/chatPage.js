@@ -53,10 +53,13 @@ $(document).ready(() => {
             })
 
             // make one big string
-            const messagesHtml = messages.join("")
-            addMessagesHtmlToPage(messagesHtml)
-            scrollToBottom(false)
+            const messagesHtml = messages.join("");
+            addMessagesHtmlToPage(messagesHtml);
+            scrollToBottom(false);
+            markAllMessagesAsRead();
+
             $(".loadingSpinnerContainer").remove()
+            $(".chatContainer").css("visibility", "visible")
         }, 300)
 
     });
@@ -209,4 +212,19 @@ function scrollToBottom(animated) {
         container.scrollTop(scrollHeight)
         window.scrollTo(0, document.body.scrollHeight);
     }
+}
+
+function markAllMessagesAsRead() {
+    $.ajax({
+        url: `/api/v1/chats/${chatId}/messages/markAsRead`,
+        type: "PUT",
+        data: {chatName: name},
+        success: (data, status, xhr) => {
+
+            setTimeout(() => {
+                refreshMessagesBadge()
+            }, 200)
+
+        }
+    })
 }
